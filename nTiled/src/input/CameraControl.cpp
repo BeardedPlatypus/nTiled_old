@@ -7,6 +7,8 @@
 #include <glm\glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
+#include "camera\CameraData.h"
+
 // ----------------------------------------------------------------------------
 //  TurnTableControl
 // ----------------------------------------------------------------------------
@@ -40,7 +42,7 @@ void TurnTableCameraControl::update(CameraData &data, GLFWwindow &window) {
 
 			// camera x-axis rotations
 			double dif_y = (pos_cur_y - this->pos_prev_y);
-			float angle_x = dif_y / this->sensitivity;
+			float angle_x = (float) dif_y / this->sensitivity;
 
 			glm::mat4 lookAt = data.lookAt;
 			glm::vec3 camera_x_axis = glm::vec3(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f) * lookAt);
@@ -48,7 +50,7 @@ void TurnTableCameraControl::update(CameraData &data, GLFWwindow &window) {
 
 			// world y-axis rotations
 			double dif_x = (pos_cur_x - this->pos_prev_x);
-			float angle_y = dif_x / this->sensitivity;
+			float angle_y = (float) dif_x / this->sensitivity;
 			lookAt = glm::rotate(lookAt, angle_y, glm::vec3(0.0f, 1.0f, 0.0f));
 
 			// update variables

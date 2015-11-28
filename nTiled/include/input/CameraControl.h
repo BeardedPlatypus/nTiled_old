@@ -1,7 +1,8 @@
 #pragma once
 
-#include "camera\Camera.h"
 #include <GLFW\glfw3.h>
+
+#include "camera\CameraData.h"
 
 /*
  * Camera Control Interface
@@ -9,7 +10,7 @@
 class CameraControl {
 public:
 	virtual ~CameraControl() {}
-	virtual void update(CameraData &data, GLFWwindow &window) = 0;
+	virtual void update(CameraData& data, GLFWwindow& window) = 0;
 };
 
 
@@ -22,7 +23,7 @@ public:
 	TurnTableCameraControl(bool was_pressed,
 		                   double pos_x, double pos_y,
 		                   double sensitivity);
-	void update(CameraData &data, GLFWwindow &window);
+	void update(CameraData& data, GLFWwindow& window);
 
 private:
 	bool was_pressed;
