@@ -12,8 +12,13 @@ Mesh::Mesh(std::vector<glm::vec4> vertices,
 
 // ----------------------------------------------------------------------------
 Object::Object(std::string name,
-		       Mesh& mesh) : name(name),
-		                     mesh(mesh) {}
+		       Mesh mesh) : name(name),
+		                    mesh(mesh) {}
 
 // ----------------------------------------------------------------------------
-World::World(std::vector<Object*> objects) : objects(objects) {}
+World::World() : World(std::vector<Object>(),
+	                   std::vector<Mesh>()) {}
+
+World::World(std::vector<Object> objects,
+	         std::vector<Mesh> meshes) : objects(objects), 
+                                         mesh_catalog(meshes) {}

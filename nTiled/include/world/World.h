@@ -33,10 +33,10 @@ namespace nTiled_world {
 	struct Object {
 	public:
 		Object(std::string name,
-			   nTiled_world::Mesh& mesh);
+			   nTiled_world::Mesh mesh);
 
 		const std::string name;
-		const nTiled_world::Mesh& mesh;
+		const nTiled_world::Mesh mesh;
 	private:
 		Object();
 	};
@@ -44,15 +44,15 @@ namespace nTiled_world {
 	// ------------------------------------------------------------------------
 	struct World {
 	public:
-		World(std::vector<Object*> objects);
+		World();
+		World(std::vector<Object> objects,
+			  std::vector<Mesh> meshes);
 
-		const std::vector<Object*> objects;
+		std::vector<Object> objects;
+		
+		void objectsFromOBJ(std::string &path);
+
+	private:
+		std::vector<Mesh> mesh_catalog;
 	};
-
-	// -----------------------------------------------------------------------
-	//  Read functions
-	// -----------------------------------------------------------------------
-	void objectsFromOBJ(std::string &path,
-		                std::vector<nTiled_world::Object*> &objects);
-
 }

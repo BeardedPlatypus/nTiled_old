@@ -3,6 +3,8 @@
 #include <regex>
 #include <fstream>
 
+#include <iostream>
+
 void indicesToTriangleVector(std::smatch matched_values,
 	unsigned short offset_start, unsigned offset_between,
 	glm::tvec3<glm::u32> &result1,
@@ -19,8 +21,7 @@ void indicesToTriangleVector(std::smatch matched_values,
 	}
 }
 
-void nTiled_world::objectsFromOBJ(std::string& path,
-	                              std::vector<nTiled_world::Object*>& objs) {
+void nTiled_world::World::objectsFromOBJ(std::string &path) {
 
 	std::ifstream file_in(path, std::ifstream::in);
 
@@ -209,6 +210,8 @@ void nTiled_world::objectsFromOBJ(std::string& path,
 		                    normals,
 		                    uv_coords,
 		                    elements);
+	this->mesh_catalog.push_back(mesh);
+
 	nTiled_world::Object obj(std::string("obj"), mesh);
-	objs.push_back(&obj);
+	this->objects.push_back(obj);
 }
