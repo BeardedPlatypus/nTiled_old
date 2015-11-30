@@ -9,12 +9,15 @@
 #include <GLFW/glfw3.h>
 
 #include "gui\GuiManager.h"
+#include "pipeline\PipelineManager.h"
+
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // Window dimensions
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 800, HEIGHT = 800;
+
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -52,9 +55,45 @@ int main()
 	// Define the viewport dimensions
 	glViewport(0, 0, WIDTH, HEIGHT);
 
-	nTiled_gui::GuiManager gui_manager = nTiled_gui::GuiManager();
+	// Construct a camera
+	glm::vec3 camera_eye = glm::vec3(0.0, 1.0, 4.0);
+	glm::vec3 camera_center = glm::vec3(0.0, 0.0, 0.0);
+	glm::vec3 camera_up = glm::vec3(0.0, 1.0, 0.0);
+	float fovy = 45.0f;
+	float aspect = 1.0f;
+	float z_near = 0.5f;
+	float z_far = 20.0f;
+	CameraControl& camera_control = *(new TurnTableCameraControl());
+
+	Camera camera = Camera(camera_control, 
+		                   camera_eye, 
+		                   camera_center, 
+		                   camera_up, 
+		                   fovy, 
+		                   aspect, 
+		                   z_near, 
+		                   z_far);
+
+	nTiled_gui::GuiManager gui_manager = nTiled_gui::GuiManager(camera);
+
+	// Set up GUI manager
 	gui_manager.init(*window);
+	// Set up Pipeline manager
+
+	// Pipeline
+	nTiled_pipeline::Pipeline& pipeline = nTiled_pipeline::ForwardPipeline(camera, 
+		"./src/pipeline/shaders/basicForwardColour.vert",
+		"./src/pipeline/shaders/basicForwardColour.frag");
+	// World	
+	nTiled_world::World world = nTiled_world::World();
+	world.objectsFromOBJ(std::string("./res/cubes.obj"));
+
+	nTiled_pipeline::PipelineManager pipeline_manager =
+		nTiled_pipeline::PipelineManager(pipeline, world);
 	
+	// initialise pipeline and pipeline manager.
+	pipeline_manager.init();
+
 	ImVec4 clear_color = gui_manager.getClearColor();
 	// Game loop
 	while (!glfwWindowShouldClose(window))
@@ -65,16 +104,20 @@ int main()
 
 		// Render
 		// Clear the colorbuffer
-		int display_w, display_h;
-		glfwGetFramebufferSize(window, &display_w, &display_h);
-		glViewport(0, 0, display_w, display_h);
-		glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-		glClear(GL_COLOR_BUFFER_BIT);
-		gui_manager.display();
+		glClearColor(0, 0, 0, 1);
+		glClearDepth(1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Render elements
+		pipeline_manager.render();
+		gui_manager.render();
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	}
+
+	// remove camera control from dynamic memory
+	delete &camera_control;
 
 	// Terminates GLFW, clearing any resources allocated by GLFW.
 	ImGui_ImplGlfwGL3_Shutdown();
