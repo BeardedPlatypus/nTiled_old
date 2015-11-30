@@ -1,21 +1,29 @@
 #include "gui\GuiManager.h"
 
+#include <glm\gtx\string_cast.hpp>
+
 // ----------------------------------------------------------------------------
 //  Constructor
 // ----------------------------------------------------------------------------
-nTiled_gui::GuiManager::GuiManager(ImVec4 clear_color) :
+nTiled_gui::GuiManager::GuiManager(ImVec4 clear_color, 
+	                               Camera& camera) :
 	clear_color(clear_color),
-	show_test_window(true),
-	show_another_window(false) {}
+	active_camera(&camera),
+	show_test_window(false),
+	show_another_window(false),
+	camera_has_focus(false),
+	gui_elements(std::vector<GuiElement*>()){}
 
-nTiled_gui::GuiManager::GuiManager() : 
-	nTiled_gui::GuiManager(ImColor(114, 144, 154)) {}
+nTiled_gui::GuiManager::GuiManager(Camera& camera) :
+	nTiled_gui::GuiManager(ImColor(114, 144, 154), camera) {}
 
 // ----------------------------------------------------------------------------
 //  Member functions
 // ----------------------------------------------------------------------------
 void nTiled_gui::GuiManager::init(GLFWwindow& window) {
 	ImGui_ImplGlfwGL3_Init(&window, true);
+	
+	this->gui_elements.push_back(&(CameraElement(*(this->active_camera))));
 }
 
 void nTiled_gui::GuiManager::update() {
@@ -23,8 +31,25 @@ void nTiled_gui::GuiManager::update() {
 	glfwPollEvents();
 	ImGui_ImplGlfwGL3_NewFrame();
 
+	ImGuiIO& io = ImGui::GetIO();
 	// Handle updates to Camera/view
-	
+	if (this->active_camera) {
+		if ((!io.WantCaptureMouse || !io.WantCaptureKeyboard) && io.MouseDown[0]) {
+			// we assume that we're interested in seeing if we need to update the
+			// camera whenever none of the GUI elements is active.
+				if (camera_has_focus) {
+					this->active_camera->update(io);
+				}
+				else {
+					this->active_camera->toFocus(io);
+					this->camera_has_focus = true;
+				}
+		}
+		else if (this->camera_has_focus) {
+			this->camera_has_focus = false;
+		}
+	}
+
 	// Draw gui elements.
 	{
 		static float f = 0.0f;
@@ -34,6 +59,19 @@ void nTiled_gui::GuiManager::update() {
 		if (ImGui::Button("Test Window")) show_test_window ^= 1;
 		if (ImGui::Button("Another Window")) show_another_window ^= 1;
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::Text("MouseCaptureState: %s", io.WantCaptureMouse ? "true" : "false");
+		ImGui::Text("KeyboardCaptureState: %s", io.WantCaptureKeyboard ? "true" : "false");
+		ImGui::Text("MouseDown: %s", io.MouseDown[0] ? "true" : "false");
+		ImGui::Text("Mouse x: %f", io.MousePos.x);
+		ImGui::Text("Mouse y: %f", io.MousePos.y);
+		ImGui::Text("Prev Mouse x: %f", io.MousePosPrev.x);
+		ImGui::Text("Prev Mouse y: %f", io.MousePosPrev.y);
+		
+		/*
+		for (GuiElement* element : this->gui_elements) {
+			element->render();
+		}
+		*/
 	}
 
 	// 2. Show another simple window, this time using an explicit Begin/End pair
@@ -53,7 +91,7 @@ void nTiled_gui::GuiManager::update() {
 	}
 }
 
-void nTiled_gui::GuiManager::display() {
+void nTiled_gui::GuiManager::render() {
 	ImGui::Render();
 }
 

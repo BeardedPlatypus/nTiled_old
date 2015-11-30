@@ -7,7 +7,8 @@
 //  Camera
 // ----------------------------------------------------------------------------
 //  Constructors
-Camera::Camera(CameraControl& control, CameraData data) : control(control), 
+/*
+Camera::Camera(CameraControl& control, CameraData data) : control(&control), 
                                                           data(data) {}
 
 
@@ -31,7 +32,7 @@ Camera::Camera(CameraControl& control, glm::mat4 lookAt_matrix,
 		                                                       z_near, 
 		                                                       z_far))) {}
 
-
+*/
 Camera::Camera(CameraControl& control, glm::vec3 camera_eye,
 	                                   glm::vec3 camera_center,
 	                                   glm::vec3 camera_up,
@@ -39,14 +40,20 @@ Camera::Camera(CameraControl& control, glm::vec3 camera_eye,
 	                                   float aspect,
 	                                   float z_near,
 	                                   float z_far) :
-	Camera(control, CameraData(glm::lookAt(camera_eye,
-		                                   camera_center,
-		                                   camera_up), 
-		                       glm::perspective(fovy, 
-								                aspect, 
-								                z_near, 
-								                z_far))) {}
+	control(&control),
+	data(CameraData(glm::lookAt(camera_eye,
+		                        camera_center,
+		                        camera_up), 
+		            glm::perspective(fovy, 
+		 			                 aspect, 
+								     z_near, 
+								     z_far))) {}
 
+/*
+Camera::~Camera() {
+	delete &(this->data);
+}
+*/
 
 // ----------------------------------------------------------------------------
 glm::mat4 Camera::getLookAt() {
@@ -57,6 +64,10 @@ glm::mat4 Camera::getPerspectiveMatrix() {
 	return this->data.perspective_matrix;
 }
 
-void Camera::update(GLFWwindow& window) {
-	this->control.update(this->data, window);
+void Camera::update(ImGuiIO& io) {
+	this->control->update(this->data, io);
+}
+
+void Camera::toFocus(ImGuiIO& io) {
+	this->control->activate(io);
 }
