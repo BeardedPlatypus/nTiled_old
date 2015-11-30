@@ -8,6 +8,7 @@
 namespace nTiled_pipeline {
 	class Pipeline {
 	public:
+		virtual ~Pipeline() {}
 		// Render Methods
 		virtual void init() = 0;
 		virtual void render() = 0;
@@ -17,7 +18,7 @@ namespace nTiled_pipeline {
 		virtual void setActiveCamera(Camera& camera) = 0;
 	};
 
-	class ForwardPipeline : Pipeline {
+	class ForwardPipeline : public Pipeline {
 	public:
 		ForwardPipeline(Camera& camera, 
 			            const std::string vertex_shader_path,
