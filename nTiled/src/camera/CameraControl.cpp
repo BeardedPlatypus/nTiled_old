@@ -26,13 +26,9 @@ TurnTableCameraControl::TurnTableCameraControl() :
 void TurnTableCameraControl::update(CameraData &data, ImGuiIO& io) {
 	// y values map to camera space x
 	// x values map to world space y
-	std::cout << "-------------------" << std::endl;
-	std::cout << "Updating Camera" << std::endl;
-
 	ImVec2 pos_cur = io.MousePos;
 	// camera x-axis rotations
 	double dif_y = (pos_cur.y - this->pos_prev.y);
-	std::cout << "Dif y: " << dif_y << std::endl;
 	float angle_x = (float) dif_y / this->sensitivity;
 
 	glm::mat4 lookAt = data.lookAt;
@@ -41,7 +37,6 @@ void TurnTableCameraControl::update(CameraData &data, ImGuiIO& io) {
 
 	// world y-axis rotations
 	double dif_x = (pos_cur.x - this->pos_prev.x);
-	std::cout << "Dif x: " << dif_x << std::endl;
 	float angle_y = (float) dif_x / this->sensitivity;
 	lookAt = glm::rotate(lookAt, angle_y, glm::vec3(0.0f, 1.0f, 0.0f));
 

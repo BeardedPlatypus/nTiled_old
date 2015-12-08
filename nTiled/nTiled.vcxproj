@@ -165,21 +165,33 @@
     <ClCompile Include="src\nTiled.cpp" />
     <ClCompile Include="src\pipeline\Pipeline.cpp" />
     <ClCompile Include="src\pipeline\PipelineManager.cpp" />
+    <ClCompile Include="src\pipeline\PipeLineObject.cpp" />
     <ClCompile Include="src\pipeline\shader-util\LoadShaders.cpp" />
+    <ClCompile Include="src\pipeline\shaders\BasicForwardVertLightShader.cpp" />
+    <ClCompile Include="src\world\LightConstructors\PointLightConstructor.cpp" />
+    <ClCompile Include="src\world\Lights.cpp" />
+    <ClCompile Include="src\world\ObjectConstructors\IcosphereConstructor.cpp" />
+    <ClCompile Include="src\world\ObjectConstructors\ObjConstructor.cpp" />
     <ClCompile Include="src\world\ObjectsFromOBJ.cpp" />
+    <ClCompile Include="src\world\ObjectConstructors\CubeConstructor.cpp" />
     <ClCompile Include="src\world\World_structs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\camera\Camera.h" />
     <ClInclude Include="include\camera\CameraData.h" />
     <ClInclude Include="include\camera\CameraControl.h" />
-    <ClInclude Include="include\gui\Gui.h" />
     <ClInclude Include="include\gui\GuiElement.h" />
     <ClInclude Include="include\gui\GuiManager.h" />
     <ClInclude Include="include\gui\imgui_impl_glfw_gl3.h" />
     <ClInclude Include="include\pipeline\Pipeline.h" />
     <ClInclude Include="include\pipeline\PipelineManager.h" />
+    <ClInclude Include="include\pipeline\PipelineObject.h" />
     <ClInclude Include="include\pipeline\shader-util\LoadShaders.h" />
+    <ClInclude Include="include\pipeline\shaders\Shader.h" />
+    <ClInclude Include="include\world\LightConstructor.h" />
+    <ClInclude Include="include\world\Lights.h" />
+    <ClInclude Include="include\world\Object.h" />
+    <ClInclude Include="include\world\ObjectConstructors.h" />
     <ClInclude Include="include\world\World.h" />
   </ItemGroup>
   <ItemGroup>

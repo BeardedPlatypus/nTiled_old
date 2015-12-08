@@ -10,7 +10,11 @@
 
 #include "gui\GuiManager.h"
 #include "pipeline\PipelineManager.h"
+#include "world\ObjectConstructors.h"
+// debugger amd / nvidia openGL
 
+#define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.vert")
+#define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.frag")
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -78,15 +82,77 @@ int main()
 
 	// Set up GUI manager
 	gui_manager.init(*window);
-	// Set up Pipeline manager
 
-	// Pipeline
-	nTiled_pipeline::Pipeline& pipeline = nTiled_pipeline::ForwardPipeline(camera, 
-		"./src/pipeline/shaders/basicForwardColour.vert",
-		"./src/pipeline/shaders/basicForwardColour.frag");
+	// Shaders
+	std::string basic_shader_id = std::string("basic");
+	nTiled_pipeline::BasicForwardVertLightShader shader =
+		nTiled_pipeline::BasicForwardVertLightShader(basic_shader_id, 
+			                                         VERT_SHADER_PATH, 
+			                                         FRAG_SHADER_PATH);
+
+	std::vector<nTiled_pipeline::ShaderBatch*> shaders = { &shader };
+
 	// World	
 	nTiled_world::World world = nTiled_world::World();
-	world.objectsFromOBJ(std::string("./res/cubes.obj"));
+
+	glm::mat4 transformation =
+		glm::mat4(
+			0.5, 0.0, 0.0, 0.0,
+			0.0, 0.5, 0.0, 0.0,
+			0.0, 0.0, 0.5, 0.0,
+			0.0, 0.0, 0.0, 1.0
+			);
+
+	nTiled_world::ObjConstructor suzanneConstructor =
+		nTiled_world::ObjConstructor(world, std::string("./res/suzanne.obj"));
+	suzanneConstructor.add(std::string("suzanne"), 
+		                   basic_shader_id,
+		                   transformation);
+
+	
+	glm::mat4 transformation1 =
+		glm::mat4(
+			1.0, 0.0, 0.0, 0.0,
+			0.0, 1.0, 0.0, 0.0,
+			0.0, 0.0, 1.0, 0.0,
+			0.0, 2.5, 0.0, 1.0
+			);
+	/*
+	nTiled_world::IcosphereConstructor icosphereConstructor =
+		nTiled_world::IcosphereConstructor(world);
+
+	icosphereConstructor.add("sphere", 
+		                     std::string("basic"),
+		                     transformation1);
+	*/
+	// add lights real dirty
+	nTiled_world::PointLight light = nTiled_world::PointLight(
+		glm::vec4(0.0f, 5.0f, 0.0f, 1.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f),
+		10.0f,
+		true,
+		world.objects[0],
+		world.objects[0]);
+	world.lights.push_back(light);
+
+	/*
+	world.objectFromOBJ(std::string("./res/cube2.obj"), transformation1);
+	
+	glm::mat4 transformation2 = 
+		glm::mat4(
+			1.0, 0.0, 0.0, 0.0,
+			0.0, 1.0, 0.0, 0.0,
+			0.0, 0.0, 1.0, 0.0,
+			0.0, 0.75, 0.0, 1.0
+			);
+
+	world.objectFromOBJ(std::string("./res/cube2.obj"), transformation2);
+	*/
+
+	//std::cout << world.objects[1].mesh.vertices.size() << std::endl;
+
+	// Pipeline
+	nTiled_pipeline::Pipeline& pipeline = nTiled_pipeline::ForwardPipeline(camera, shaders);
 
 	nTiled_pipeline::PipelineManager pipeline_manager =
 		nTiled_pipeline::PipelineManager(pipeline, world);
