@@ -1,11 +1,10 @@
-#include "world\World.h"
+#include "world\ObjectConstructors.h"
 
 #include <regex>
 #include <fstream>
 
-#include <iostream>
+using namespace nTiled_world;
 
-/*
 void indicesToTriangleVector(std::smatch matched_values,
 	unsigned short offset_start, unsigned short offset_between,
 	glm::tvec3<glm::u32> &result1,
@@ -23,13 +22,13 @@ void indicesToTriangleVector(std::smatch matched_values,
 }
 
 void faceNormalsToVertexNormals(std::smatch matched_values,
-	unsigned short offset_start_vertex, 
+	unsigned short offset_start_vertex,
 	unsigned short offset_normal,
 	unsigned short offset_between,
 	std::vector<glm::vec3> &face_normals,
 	std::vector<glm::vec3> &vertex_normals,
 	std::vector<unsigned int> &vertex_normals_count) {
-	
+
 	// first vertex normal
 	vertex_normals[std::stoul(matched_values[1 + offset_start_vertex]) - 1] +=
 		face_normals[
@@ -39,44 +38,42 @@ void faceNormalsToVertexNormals(std::smatch matched_values,
 	vertex_normals_count[std::stoul(matched_values[1 + offset_start_vertex]) - 1] += 1;
 
 	// second vertex normal
-	vertex_normals[std::stoul(matched_values[1 + offset_start_vertex 
-		                                       + offset_between]) - 1] +=
-		face_normals[std::stoul(matched_values[1 + offset_start_vertex 
-			                                     + offset_between
-			                                     + offset_normal]) - 1
+	vertex_normals[std::stoul(matched_values[1 + offset_start_vertex
+		+ offset_between]) - 1] +=
+		face_normals[std::stoul(matched_values[1 + offset_start_vertex
+			+ offset_between
+			+ offset_normal]) - 1
 		];
 	vertex_normals_count[std::stoul(matched_values[1 + offset_start_vertex
-		                                             + offset_between]) - 1] += 1;
+		+ offset_between]) - 1] += 1;
 
 	// third vertex normal
 	vertex_normals[std::stoul(matched_values[1 + offset_start_vertex
-		                                       + 2* offset_between]) - 1] +=
+		+ 2 * offset_between]) - 1] +=
 		face_normals[std::stoul(matched_values[1 + offset_start_vertex
-			                                     + 2* offset_between
-			                                     + offset_normal]) - 1
+			+ 2 * offset_between
+			+ offset_normal]) - 1
 		];
 	vertex_normals_count[std::stoul(matched_values[1 + offset_start_vertex
-		                                       + 2 * offset_between]) - 1] += 1;
+		+ 2 * offset_between]) - 1] += 1;
 
 	// fourth vertex normal if it exist
 	if (matched_values[1 + offset_start_vertex + 3 * offset_between] != "") {
 		vertex_normals[std::stoul(matched_values[
 			1 + offset_start_vertex
-			  + 3 * offset_between]) - 1] +=
+				+ 3 * offset_between]) - 1] +=
 			face_normals[std::stoul(matched_values[
 				1 + offset_start_vertex
-				  + 3 * offset_between
-				  + offset_normal]) - 1
+					+ 3 * offset_between
+					+ offset_normal]) - 1
 			];
-		vertex_normals_count[std::stoul(matched_values[
-			1 + offset_start_vertex
-			  + 3 * offset_between]) - 1] += 1;
+			vertex_normals_count[std::stoul(matched_values[
+				1 + offset_start_vertex
+					+ 3 * offset_between]) - 1] += 1;
 	}
 }
 
-void nTiled_world::World::objectFromOBJ(std::string &path, 
-	                                    glm::mat4 transformationMatrix) {
-
+ObjConstructor::ObjConstructor(World& world, std::string path) : world(world) {
 	std::ifstream file_in(path, std::ifstream::in);
 
 	// error if file could not be read
@@ -224,7 +221,7 @@ void nTiled_world::World::objectFromOBJ(std::string &path,
 					face_normals,
 					vertex_normals,
 					vertex_normals_count);
-				
+
 
 				bool is_quad = (m[10] != "");
 			}
@@ -278,23 +275,24 @@ void nTiled_world::World::objectFromOBJ(std::string &path,
 	// normalize vectors
 	for (unsigned int i = 0; i < vertex_normals.size(); i++) {
 		if (vertex_normals_count[i] != 0) {
-			vertex_normals[i] /= (float) vertex_normals_count[i];
+			vertex_normals[i] /= (float)vertex_normals_count[i];
 		}
-		std::cout << i << ": " << vertex_normals[i].x << "  " << vertex_normals[i].y << "  " << vertex_normals[i].z << "  " << std::endl;
 	}
 
 	// construct mesh
-	nTiled_world::Mesh mesh(vertices,
-		                    vertex_normals,
-		                    uv_coords,
-		                    elements);
-	this->mesh_catalog.push_back(mesh);
-
-	nTiled_world::Object obj(std::string("obj"), mesh, transformationMatrix);
-	this->objects.push_back(obj);
+	int i = this->world.addMesh(Mesh(vertices,
+		                             vertex_normals,
+		                             uv_coords,
+		                             elements));
+	this->obj_mesh = this->world.getMeshPointer(i);
 }
 
-void nTiled_world::World::objectFromOBJ(std::string &path) {
-	this->objectFromOBJ(path, glm::mat4(1.0));
+Object* ObjConstructor::add(std::string name, 
+	                        std::string shader_id,
+	                        glm::mat4 transformationMatrix) {
+	int i = this->world.addObject(Object(name, 
+		                          *(this->obj_mesh), 
+		                          shader_id,
+		                          transformationMatrix));
+	return this->world.getObjectPointer(i);
 }
-*/
