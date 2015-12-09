@@ -1,5 +1,8 @@
 #version 450
 
+//#define MAX_N_LIGHTS 20
+#define NUM_LIGHTS 0
+
 // input buffers
 // ----------------------------------------------------------------------------
 layout (location=0) in vec4 vertexPosition;
@@ -18,12 +21,17 @@ uniform mat4 modelToCameraMatrix;
 uniform mat3 normalModelToCameraMatrix;
 
 // light definition
+struct Light {
+    vec4 positionCameraCoordinates; // 4
+    vec3 intensity;                 // 3
+    float radius;                   // 1
+    int is_emitting;
+};
+
+//uniform int numLights;    
 layout (std140) uniform LightBlock {
-    vec4 positionCameraCoordinates;
-    vec3 intensity;
-    float radius;
-    bool is_emitting;    
-} light;
+    Light lights[NUM_LIGHTS];
+};
 
 // ----------------------------------------------------------------------------
 //  Main
@@ -38,10 +46,16 @@ void main() {
 	gl_Position = cameraToClipMatrix * vertexCameraCoordinates;
 
 	// calculate lighting
-    vec3 directionToLight = normalize(vec3(light.positionCameraCoordinates - vertexCameraCoordinates));
-    float cosAngIncidence = dot(normalCameraCoordinates, directionToLight);
-    cosAngIncidence = clamp(cosAngIncidence, 0, 1);
+    vec3 lightAcc = vec3(0.0f, 0.0f, 0.0f);
 
-    //color = lightIntensity * diffuseColor * cosAngIncidence;
-	color = vec3(0.1f, 0.1f, 0.1f) + (light.intensity * cosAngIncidence *0.9);
+    //for (int i = 0; i < numLights; i++) {
+    // due to dynamic for loops not working, (ab)using preprocessor instead.
+    for (int i = 0; i < NUM_LIGHTS; i++) {
+        vec3 directionToLight = normalize(vec3(lights[i].positionCameraCoordinates - vertexCameraCoordinates));
+        float cosAngIncidence = dot(normalCameraCoordinates, directionToLight);
+        cosAngIncidence = clamp(cosAngIncidence, 0, 1);
+
+	    lightAcc += lights[i].intensity * cosAngIncidence;
+    }
+    color = vec3(0.1f, 0.1f, 0.1f) + (lightAcc * 0.9);
 }

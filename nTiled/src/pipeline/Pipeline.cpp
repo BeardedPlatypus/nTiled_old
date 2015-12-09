@@ -32,7 +32,7 @@ void ForwardPipeline::init(nTiled_world::World& world) {
 	// setup lights
 	for (const auto& shader_couple : this->shaders) {
 		ShaderBatch* b = shader_couple.second;
-		b->setLight(&world.lights[0]);
+		b->addLight(&world.lights[0]);
 	}
 
 	// initialise each shader
