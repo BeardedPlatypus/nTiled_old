@@ -24,10 +24,11 @@ namespace nTiled_pipeline {
 	};
 
 	struct PipelineLightData {
-		glm::vec4 positionCameraCoordinates;
-		glm::vec3 intensity;
-		float radius;
-		bool is_emitting;
+		glm::vec4 positionCoordinates; 
+		glm::vec3 intensity;                 
+		float radius;                        
+		int is_emitting;                    
+		int _pad[3]; // Add 3 padding to align PipeLineLightData for gpu
 	};
 }
 

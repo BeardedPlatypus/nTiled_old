@@ -78,10 +78,10 @@
     <ClCompile Include="src\world\LightConstructors\PointLightConstructor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pipeline\shaders\BasicForwardVertLightShader.cpp">
+    <ClCompile Include="src\pipeline\PipeLineObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pipeline\PipeLineObject.cpp">
+    <ClCompile Include="src\pipeline\shaders\BasicForwardLightShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -132,6 +132,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\pipeline\PipelineObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\shaders\BasicForwardLightShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

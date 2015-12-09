@@ -11,6 +11,7 @@
 #include "gui\GuiManager.h"
 #include "pipeline\PipelineManager.h"
 #include "world\ObjectConstructors.h"
+#include "pipeline\shaders\BasicForwardLightShader.h"
 // debugger amd / nvidia openGL
 
 #define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.vert")
@@ -55,6 +56,8 @@ int main()
 		std::cout << "Failed to initialize OpenGL context" << std::endl;
 		return -1;
 	}
+
+	std::cout << "loaded opengl " << glGetString(GL_VERSION) << std::endl;
 
 	// Define the viewport dimensions
 	glViewport(0, 0, WIDTH, HEIGHT);

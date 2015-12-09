@@ -167,7 +167,7 @@
     <ClCompile Include="src\pipeline\PipelineManager.cpp" />
     <ClCompile Include="src\pipeline\PipeLineObject.cpp" />
     <ClCompile Include="src\pipeline\shader-util\LoadShaders.cpp" />
-    <ClCompile Include="src\pipeline\shaders\BasicForwardVertLightShader.cpp" />
+    <ClCompile Include="src\pipeline\shaders\BasicForwardLightShader.cpp" />
     <ClCompile Include="src\world\LightConstructors\PointLightConstructor.cpp" />
     <ClCompile Include="src\world\Lights.cpp" />
     <ClCompile Include="src\world\ObjectConstructors\IcosphereConstructor.cpp" />
@@ -187,6 +187,7 @@
     <ClInclude Include="include\pipeline\PipelineManager.h" />
     <ClInclude Include="include\pipeline\PipelineObject.h" />
     <ClInclude Include="include\pipeline\shader-util\LoadShaders.h" />
+    <ClInclude Include="include\pipeline\shaders\BasicForwardLightShader.h" />
     <ClInclude Include="include\pipeline\shaders\Shader.h" />
     <ClInclude Include="include\world\LightConstructor.h" />
     <ClInclude Include="include\world\Lights.h" />
