@@ -11,7 +11,7 @@ namespace nTiled_pipeline {
 		std::string getName();
 
 		void init(Camera& camera);
-		void render(Camera& camera);
+		virtual void render(Camera& camera) = 0;
 
 		void addObject(PipelineObject* obj_p);
 		void addLight(nTiled_world::PointLight* light);
@@ -37,6 +37,7 @@ namespace nTiled_pipeline {
 			                        std::string path_vertex_shader,
 			                        std::string path_fragment_shader);
 
+		void render(Camera& camera);
 		void loadShaders();
 	};
 
@@ -45,6 +46,7 @@ namespace nTiled_pipeline {
 		BasicForwardFragLightShader(std::string name,
 			std::string path_vertex_shader,
 			std::string path_fragment_shader);
+		void render(Camera& camera);
 		void loadShaders();
 	};
 }

@@ -197,6 +197,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
+    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLights.frag" />
+    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLights.vert" />
+    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLightsFrag.frag" />
+    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLightsFrag.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

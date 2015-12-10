@@ -14,8 +14,11 @@
 #include "pipeline\shaders\BasicForwardLightShader.h"
 // debugger amd / nvidia openGL
 
-#define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.vert")
-#define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.frag")
+//#define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.vert")
+//#define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.frag")
+#define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLightsFrag.vert")
+#define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLightsFrag.frag")
+
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -88,9 +91,15 @@ int main()
 
 	// Shaders
 	std::string basic_shader_id = std::string("basic");
+	/*
 	nTiled_pipeline::BasicForwardVertLightShader shader =
 		nTiled_pipeline::BasicForwardVertLightShader(basic_shader_id, 
 			                                         VERT_SHADER_PATH, 
+			                                         FRAG_SHADER_PATH);
+    */
+	nTiled_pipeline::BasicForwardFragLightShader shader =
+		nTiled_pipeline::BasicForwardFragLightShader(basic_shader_id,
+			                                         VERT_SHADER_PATH,
 			                                         FRAG_SHADER_PATH);
 
 	std::vector<nTiled_pipeline::ShaderBatch*> shaders = { &shader };
