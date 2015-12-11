@@ -8,8 +8,6 @@
 #include "pipeline\shader-util\LoadShaders.h"
 #include "camera\Camera.h"
 
-#define MAX_N_LIGHTS 20
-
 using namespace nTiled_pipeline;
 
 // ----------------------------------------------------------------------------

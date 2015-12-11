@@ -51,9 +51,6 @@
     <ClCompile Include="src\pipeline\PipelineManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pipeline\Pipeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\world\World_structs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -82,6 +79,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\pipeline\shaders\BasicForwardLightShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\BasicDeferredLightShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\DeferredShading\GBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\ForwardPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\Pipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\DeferredPipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,12 +149,22 @@
     <ClInclude Include="include\pipeline\shaders\BasicForwardLightShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\pipeline\shaders\BasicDeferredLightShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\shaders\DeferredShading\GBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
-    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLights.frag" />
-    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLights.vert" />
-    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLightsFrag.frag" />
-    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLightsFrag.vert" />
+    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLights.frag" />
+    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLights.vert" />
+    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLightsFrag.frag" />
+    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLightsFrag.vert" />
+    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSGeometryPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSGeometryPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSLightPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSLightPass.vert" />
   </ItemGroup>
 </Project>

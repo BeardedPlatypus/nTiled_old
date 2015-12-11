@@ -13,21 +13,28 @@
 
 namespace nTiled_pipeline {
 	// ---------------------------------------------------------------------------
-	//  Pipeline classes
+	//  Pipeline Base class
+	// ---------------------------------------------------------------------------
 	class Pipeline {
 	public:
+		Pipeline(Camera& camera);
 		virtual ~Pipeline() {}
 		// Render Methods
 		virtual void init(nTiled_world::World& world) = 0;
 		virtual void render() = 0;
 
 		// Property Methods
-		virtual Camera getActiveCamera() = 0;
-		virtual void setActiveCamera(Camera& camera) = 0;
+		Camera getActiveCamera();
+		void setActiveCamera(Camera& camera);
 
 		virtual void addObject(nTiled_world::Object& object) = 0;
+	protected:
+		Camera* camera;
 	};
 
+	// ----------------------------------------------------------------------------
+	//  Forward Pipeline
+	// ----------------------------------------------------------------------------
 	class ForwardPipeline : public Pipeline {
 	public:
 		ForwardPipeline(Camera& camera, 
@@ -38,16 +45,32 @@ namespace nTiled_pipeline {
 		void render();
 
 		// Property Methods
-		Camera getActiveCamera();
-		void setActiveCamera(Camera& camera);
-
 		void addObject(nTiled_world::Object& object);
 
-	private:
-		Camera* camera;
-		
+	private:		
 		// Render methods.
 		std::vector<PipelineObject> objects;
 		std::map<std::string, ShaderBatch*> shaders;
+	};
+
+	// ----------------------------------------------------------------------------
+	//  Deferred Pipeline
+	// ----------------------------------------------------------------------------
+	class DeferredPipeline : public Pipeline {
+	public:
+		DeferredPipeline(Camera& camera,
+			             ShaderBatch& shader);
+
+		// Render Methods
+		void init(nTiled_world::World& world);
+		void render();
+
+		// Property Methods
+		void addObject(nTiled_world::Object& object);
+	
+	private:
+		// Render methods.
+		std::vector<PipelineObject> objects;
+		ShaderBatch* deferredShader;
 	};
 }

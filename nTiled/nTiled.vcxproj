@@ -163,11 +163,15 @@
     <ClCompile Include="src\gui\GuiManager.cpp" />
     <ClCompile Include="src\gui\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="src\nTiled.cpp" />
+    <ClCompile Include="src\pipeline\DeferredPipeline.cpp" />
+    <ClCompile Include="src\pipeline\ForwardPipeline.cpp" />
     <ClCompile Include="src\pipeline\Pipeline.cpp" />
     <ClCompile Include="src\pipeline\PipelineManager.cpp" />
     <ClCompile Include="src\pipeline\PipeLineObject.cpp" />
     <ClCompile Include="src\pipeline\shader-util\LoadShaders.cpp" />
+    <ClCompile Include="src\pipeline\shaders\BasicDeferredLightShader.cpp" />
     <ClCompile Include="src\pipeline\shaders\BasicForwardLightShader.cpp" />
+    <ClCompile Include="src\pipeline\shaders\DeferredShading\GBuffer.cpp" />
     <ClCompile Include="src\world\LightConstructors\PointLightConstructor.cpp" />
     <ClCompile Include="src\world\Lights.cpp" />
     <ClCompile Include="src\world\ObjectConstructors\IcosphereConstructor.cpp" />
@@ -187,7 +191,9 @@
     <ClInclude Include="include\pipeline\PipelineManager.h" />
     <ClInclude Include="include\pipeline\PipelineObject.h" />
     <ClInclude Include="include\pipeline\shader-util\LoadShaders.h" />
+    <ClInclude Include="include\pipeline\shaders\BasicDeferredLightShader.h" />
     <ClInclude Include="include\pipeline\shaders\BasicForwardLightShader.h" />
+    <ClInclude Include="include\pipeline\shaders\DeferredShading\GBuffer.h" />
     <ClInclude Include="include\pipeline\shaders\Shader.h" />
     <ClInclude Include="include\world\LightConstructor.h" />
     <ClInclude Include="include\world\Lights.h" />
@@ -197,10 +203,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
-    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLights.frag" />
-    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLights.vert" />
-    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLightsFrag.frag" />
-    <None Include="src\pipeline\shaders-glsl\basicForwardMultipleLightsFrag.vert" />
+    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSGeometryPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSGeometryPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSLightPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSLightPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLights.frag" />
+    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLights.vert" />
+    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLightsFrag.frag" />
+    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLightsFrag.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

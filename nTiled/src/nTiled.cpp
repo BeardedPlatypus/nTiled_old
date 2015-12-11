@@ -16,9 +16,8 @@
 
 //#define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.vert")
 //#define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.frag")
-#define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLightsFrag.vert")
-#define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLightsFrag.frag")
-
+#define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/ForwardShading/basicForwardMultipleLightsFrag.vert")
+#define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/ForwardShading/basicForwardMultipleLightsFrag.frag")
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
