@@ -18,8 +18,13 @@ namespace nTiled_pipeline {
 		void init();
 
 		void bindForWriting();
+		void unbindForWriting();
+
 		void bindForReading();
 		void setReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
+
+		GLuint getPointerFBO();
+
 	private:
 		unsigned int width;
 		unsigned int height;

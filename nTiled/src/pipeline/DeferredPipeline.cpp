@@ -96,4 +96,5 @@ void DeferredPipeline::addObject(nTiled_world::Object& object) {
 		                                   element_buffer,
 		                                   object.mesh.elements.size() * 3,
 		                                   object.transformationMatrix));
+	this->deferredShader->addObject(&(this->objects[this->objects.size() - 1]));
 }

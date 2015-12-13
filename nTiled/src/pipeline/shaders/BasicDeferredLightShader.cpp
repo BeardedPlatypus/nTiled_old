@@ -85,8 +85,14 @@ void BasicDeferredLightShader::renderGeometryPass(Camera& camera) {
 	// enable writing to gBuffer
 	this->gBuffer.bindForWriting();
 
+	// Only the geometry pass updates the depth buffer
+	//glDepthMask(GL_TRUE);
+
 	// clear old contents gBuffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//glEnable(GL_DEPTH_TEST);
+	//glDisable(GL_BLEND);
 
 	// Rendering to GBuffer
 	// ---------------------------------------------------------------------------
@@ -110,29 +116,56 @@ void BasicDeferredLightShader::renderGeometryPass(Camera& camera) {
 			           obj_p->element_buffer_size,
 			           GL_UNSIGNED_INT, 0);
 	}
+
+	this->gBuffer.unbindForWriting();
 	glUseProgram(0);
+
+	//glDepthMask(GL_FALSE);
+	//glDisable(GL_DEPTH_TEST);
 }
 
 void BasicDeferredLightShader::renderLightPass() {
 	// TODO
-	// Restore default frame buffer and clear it.
+	// Restore default frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Setup GBuffer
-	this->gBuffer.bindForReading();
+	//this->gBuffer.bindForReading();
 
 	// FIXME eeeks hard coded constants
 	GLsizei HalfWidth = (GLsizei)(WIDTH / 2.0f);
 	GLsizei HalfHeight = (GLsizei)(HEIGHT / 2.0f);
 
+	
+	/*
+	this->gBuffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+	glBlitNamedFramebuffer(this->gBuffer.getPointerFBO(), 0,
+		                   0, 0, WIDTH, HEIGHT,
+		                   0, 0, WIDTH, HEIGHT, 
+		                   GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	*/
+
+	/*
+	this->gBuffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+	glBlitNamedFramebuffer(this->gBuffer.getPointerFBO(), 0,
+		0, 0, WIDTH, HEIGHT,
+		0, 0, WIDTH, HEIGHT,
+		GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	*/
+
 	this->gBuffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
-	glBlitFramebuffer(0, 0, WIDTH, HEIGHT,
-		0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBlitNamedFramebuffer(this->gBuffer.getPointerFBO(), 0, 
+		                   0, 0, WIDTH, HEIGHT,
+		                   0, HalfHeight, HalfWidth, HEIGHT,
+		                   GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 	this->gBuffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
-	glBlitFramebuffer(0, 0, WIDTH, HEIGHT,
-		0, HalfHeight, HalfWidth, HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	glBlitNamedFramebuffer(this->gBuffer.getPointerFBO(), 0, 
+		                   0, 0, WIDTH, HEIGHT,
+		                   HalfWidth, HalfHeight, WIDTH, HEIGHT, 
+		                   GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	
 }
 
 void BasicDeferredLightShader::loadShaders() {
@@ -156,8 +189,22 @@ void BasicDeferredLightShader::loadShaders() {
 	GLuint lightPassVertexShader = compileShader(GL_VERTEX_SHADER,
 		lightPassVertexShaderBuffer.str());
 
-	std::stringstream lightPassFragmentShaderBuffer =
-		readShader(this->path_light_pass_fragment_shader);
+	std::stringstream lightPassFragmentShaderBuffer;
+	std::string replaceLine = "#define NUM_LIGHTS ";
+	std::string n_lights = std::to_string(this->light_data.size());
+
+	std::ifstream file_in(this->path_light_pass_fragment_shader, 
+		                  std::ifstream::in);
+
+	for (std::string line; std::getline(file_in, line);) {
+		if (line.compare(0, replaceLine.size(), replaceLine) == 0) {
+			lightPassFragmentShaderBuffer << replaceLine << n_lights << std::endl;
+		}
+		else {
+			lightPassFragmentShaderBuffer << line << std::endl;
+		}
+	}
+
 	GLuint lightPassFragmentShader = compileShader(GL_FRAGMENT_SHADER,
 		lightPassFragmentShaderBuffer.str());
 

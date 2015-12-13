@@ -1,6 +1,7 @@
 #include "pipeline\shaders\DeferredShading\GBuffer.h"
 
 #include <stdio.h>
+#include <iostream>
 #include <string>
 
 using namespace nTiled_pipeline;
@@ -37,7 +38,7 @@ void GBuffer::init() {
 			         this->width, this->height,   // dimensions
 			         0,                           // border
 			         GL_RGB,                      // format
-			         GL_FLOAT,                    // type
+			         GL_UNSIGNED_SHORT_5_6_5,     // type
 			         NULL                         // data
 			);            
 		// Attach texture the framebuffer object
@@ -83,14 +84,27 @@ void GBuffer::init() {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
+
+// ----------------------------------------------------------------------------
+//  Read / Write operation
+// ----------------------------------------------------------------------------
 void GBuffer::bindForWriting() {
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->p_fbo);
+}
+
+void GBuffer::unbindForWriting() {
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
 void GBuffer::bindForReading() {
 	glBindFramebuffer(GL_READ_BUFFER, this->p_fbo);
 }
 
-void GBuffer::setReadBuffer(GBUFFER_TEXTURE_TYPE TextureType) {
-	glReadBuffer(GL_COLOR_ATTACHMENT0 + TextureType);
+void GBuffer::setReadBuffer(GBUFFER_TEXTURE_TYPE texture_type) {
+	glNamedFramebufferReadBuffer(this->p_fbo,
+		                         GL_COLOR_ATTACHMENT0 + texture_type);
+}
+
+GLuint GBuffer::getPointerFBO() {
+	return this->p_fbo;
 }

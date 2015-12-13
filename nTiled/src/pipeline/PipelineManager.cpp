@@ -33,9 +33,4 @@ void PipelineManager::init() {
 
 void PipelineManager::render() {
 	this->pipeline->render();
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer);
-	glDrawElements(GL_TRIANGLES, 
-		this->world->objects[0].mesh.elements.size() * 3, 
-		GL_UNSIGNED_INT, 0);
 }

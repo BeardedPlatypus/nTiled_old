@@ -11,13 +11,29 @@
 #include "gui\GuiManager.h"
 #include "pipeline\PipelineManager.h"
 #include "world\ObjectConstructors.h"
+
 #include "pipeline\shaders\BasicForwardLightShader.h"
+#include "pipeline\shaders\BasicDeferredLightShader.h"
+
 // debugger amd / nvidia openGL
 
-//#define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.vert")
-//#define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.frag")
+/*
+#define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.vert")
+#define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.frag")
+*/
+
+/*
 #define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/ForwardShading/basicForwardMultipleLightsFrag.vert")
 #define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/ForwardShading/basicForwardMultipleLightsFrag.frag")
+*/
+
+
+#define GP_VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/DeferredShading/DSGeometryPass.vert")
+#define GP_FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/DeferredShading/DSGeometryPass.frag")
+#define LP_VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/DeferredShading/DSLightPass.vert")
+#define LP_FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/DeferredShading/DSLightPass.frag")
+
+
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -96,12 +112,24 @@ int main()
 			                                         VERT_SHADER_PATH, 
 			                                         FRAG_SHADER_PATH);
     */
+
+	nTiled_pipeline::BasicDeferredLightShader shader =
+		nTiled_pipeline::BasicDeferredLightShader(basic_shader_id,
+			                                      GP_VERT_SHADER_PATH,
+			                                      GP_FRAG_SHADER_PATH,
+			                                      LP_VERT_SHADER_PATH,
+			                                      LP_FRAG_SHADER_PATH,
+			                                      WIDTH, HEIGHT);
+
+	/*
 	nTiled_pipeline::BasicForwardFragLightShader shader =
 		nTiled_pipeline::BasicForwardFragLightShader(basic_shader_id,
-			                                         VERT_SHADER_PATH,
-			                                         FRAG_SHADER_PATH);
+			VERT_SHADER_PATH,
+			FRAG_SHADER_PATH);
+	
 
 	std::vector<nTiled_pipeline::ShaderBatch*> shaders = { &shader };
+	*/
 
 	// World	
 	nTiled_world::World world = nTiled_world::World();
@@ -163,7 +191,13 @@ int main()
 	//std::cout << world.objects[1].mesh.vertices.size() << std::endl;
 
 	// Pipeline
+	/*
 	nTiled_pipeline::Pipeline& pipeline = nTiled_pipeline::ForwardPipeline(camera, shaders);
+	*/
+
+	
+	nTiled_pipeline::Pipeline& pipeline = nTiled_pipeline::DeferredPipeline(camera, shader);
+	
 
 	nTiled_pipeline::PipelineManager pipeline_manager =
 		nTiled_pipeline::PipelineManager(pipeline, world);
