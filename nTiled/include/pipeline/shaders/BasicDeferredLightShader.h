@@ -21,7 +21,8 @@ namespace nTiled_pipeline {
 		void render(Camera& camera);
 		
 		void renderGeometryPass(Camera& camera);
-		void renderLightPass();
+		void renderLightPass(Camera& camera);
+		void renderBuffers();
 
 		// Property functions
 		std::string getName();
@@ -49,5 +50,7 @@ namespace nTiled_pipeline {
 
 		std::string path_light_pass_vertex_shader;
 		std::string path_light_pass_fragment_shader;
+
+		PipelineObject fullscreen_quad;
 	};
 }

@@ -11,6 +11,7 @@ namespace nTiled_pipeline {
 	struct PipelineObject {
 	public:
 		// constructor
+		PipelineObject() {};
 		PipelineObject(GLuint vao,
 			GLuint element_buffer,
 			GLuint element_buffer_size,

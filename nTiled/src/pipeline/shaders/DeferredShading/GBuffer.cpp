@@ -40,7 +40,12 @@ void GBuffer::init() {
 			         GL_RGB,                      // format
 			         GL_UNSIGNED_SHORT_5_6_5,     // type
 			         NULL                         // data
-			);            
+			);       
+
+		// set 1 to 1 mapping so no interpolation between pixels occurs
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
 		// Attach texture the framebuffer object
 		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER,       // target
 			                   GL_COLOR_ATTACHMENT0 + i,  // attachment
@@ -53,6 +58,11 @@ void GBuffer::init() {
 	// Setup Depth buffer
 	// ------------------------------------------------------------------------
 	glBindTexture(GL_TEXTURE_2D, this->p_depth_texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
 	glTexImage2D(GL_TEXTURE_2D, 
 		         0, 
 		         GL_DEPTH_COMPONENT32F, 
@@ -97,7 +107,30 @@ void GBuffer::unbindForWriting() {
 }
 
 void GBuffer::bindForReading() {
-	glBindFramebuffer(GL_READ_BUFFER, this->p_fbo);
+	//glBindFramebuffer(GL_READ_BUFFER, this->p_fbo);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+	/*
+	for (unsigned int i = 0; i < this->GBUFFER_NUM_TEXTURES; i++) {
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, 
+			         this->p_textures[i]);
+	}
+
+	glActiveTexture(GL_TEXTURE0 + this->GBUFFER_NUM_TEXTURES);
+	glBindTexture(GL_TEXTURE_2D,
+		          this->p_depth_texture);
+				  */
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, this->p_textures[0]);
+
+	glActiveTexture(GL_TEXTURE0 + 1);
+	glBindTexture(GL_TEXTURE_2D, this->p_textures[1]);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, this->p_depth_texture);
+
+
 }
 
 void GBuffer::setReadBuffer(GBUFFER_TEXTURE_TYPE texture_type) {

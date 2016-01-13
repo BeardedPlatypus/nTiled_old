@@ -35,6 +35,7 @@ public:
 	// Access Camera Data
 	glm::mat4 getLookAt();
 	glm::mat4 getPerspectiveMatrix();
+	glm::vec2 getDepthrange();
 
 	// Update Camera data based on the io and the set CameraControl
 	void update(ImGuiIO& io);

@@ -22,11 +22,11 @@
 #define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/basicForwardMultipleLights.frag")
 */
 
-/*
+#define DEFERRED 1
+//#define FORWARD_FRAG 1
+
 #define VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/ForwardShading/basicForwardMultipleLightsFrag.vert")
 #define FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/ForwardShading/basicForwardMultipleLightsFrag.frag")
-*/
-
 
 #define GP_VERT_SHADER_PATH std::string("./src/pipeline/shaders-glsl/DeferredShading/DSGeometryPass.vert")
 #define GP_FRAG_SHADER_PATH std::string("./src/pipeline/shaders-glsl/DeferredShading/DSGeometryPass.frag")
@@ -86,8 +86,8 @@ int main()
 	glm::vec3 camera_up = glm::vec3(0.0, 1.0, 0.0);
 	float fovy = 45.0f;
 	float aspect = 1.0f;
-	float z_near = 0.5f;
-	float z_far = 20.0f;
+	float z_near = 2.0f;
+	float z_far = 5.0f;
 	CameraControl& camera_control = *(new TurnTableCameraControl());
 
 	Camera camera = Camera(camera_control, 
@@ -106,13 +106,27 @@ int main()
 
 	// Shaders
 	std::string basic_shader_id = std::string("basic");
-	/*
+
+/*
+#ifdef FORWARD_VERT
 	nTiled_pipeline::BasicForwardVertLightShader shader =
 		nTiled_pipeline::BasicForwardVertLightShader(basic_shader_id, 
 			                                         VERT_SHADER_PATH, 
 			                                         FRAG_SHADER_PATH);
-    */
+	std::vector<nTiled_pipeline::ShaderBatch*> shaders = { &shader };
+#endif
+*/
 
+#ifdef FORWARD_FRAG
+	nTiled_pipeline::BasicForwardFragLightShader shader =
+		nTiled_pipeline::BasicForwardFragLightShader(basic_shader_id,
+			VERT_SHADER_PATH,
+			FRAG_SHADER_PATH);
+
+	std::vector<nTiled_pipeline::ShaderBatch*> shaders = { &shader };
+#endif
+
+#ifdef DEFERRED
 	nTiled_pipeline::BasicDeferredLightShader shader =
 		nTiled_pipeline::BasicDeferredLightShader(basic_shader_id,
 			                                      GP_VERT_SHADER_PATH,
@@ -120,17 +134,8 @@ int main()
 			                                      LP_VERT_SHADER_PATH,
 			                                      LP_FRAG_SHADER_PATH,
 			                                      WIDTH, HEIGHT);
-
-	/*
-	nTiled_pipeline::BasicForwardFragLightShader shader =
-		nTiled_pipeline::BasicForwardFragLightShader(basic_shader_id,
-			VERT_SHADER_PATH,
-			FRAG_SHADER_PATH);
+#endif
 	
-
-	std::vector<nTiled_pipeline::ShaderBatch*> shaders = { &shader };
-	*/
-
 	// World	
 	nTiled_world::World world = nTiled_world::World();
 
@@ -142,12 +147,18 @@ int main()
 			0.0, 0.0, 0.0, 1.0
 			);
 
+	/*
 	nTiled_world::ObjConstructor suzanneConstructor =
 		nTiled_world::ObjConstructor(world, std::string("./res/suzanne.obj"));
 	suzanneConstructor.add(std::string("suzanne"), 
 		                   basic_shader_id,
 		                   transformation);
-
+	*/
+	nTiled_world::AssImpConstructor suzanneConstructor =
+		nTiled_world::AssImpConstructor(world, std::string("./res/suzanne2.obj"));
+	suzanneConstructor.add(std::string("suzanne"),
+		                   basic_shader_id,
+		                   transformation);
 	
 	glm::mat4 transformation1 =
 		glm::mat4(
@@ -166,7 +177,7 @@ int main()
 	*/
 	// add lights real dirty
 	nTiled_world::PointLight light = nTiled_world::PointLight(
-		glm::vec4(0.0f, 5.0f, 0.0f, 1.0f),
+		glm::vec4(0.0f, 5.0f, 2.0f, 1.0f),
 		glm::vec3(1.0f, 1.0f, 1.0f),
 		10.0f,
 		true,
@@ -191,13 +202,13 @@ int main()
 	//std::cout << world.objects[1].mesh.vertices.size() << std::endl;
 
 	// Pipeline
-	/*
+#ifdef FORWARD_FRAG
 	nTiled_pipeline::Pipeline& pipeline = nTiled_pipeline::ForwardPipeline(camera, shaders);
-	*/
+#endif
 
-	
+#ifdef DEFERRED
 	nTiled_pipeline::Pipeline& pipeline = nTiled_pipeline::DeferredPipeline(camera, shader);
-	
+#endif
 
 	nTiled_pipeline::PipelineManager pipeline_manager =
 		nTiled_pipeline::PipelineManager(pipeline, world);

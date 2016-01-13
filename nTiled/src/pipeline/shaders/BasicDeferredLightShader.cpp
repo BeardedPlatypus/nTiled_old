@@ -55,14 +55,19 @@ void BasicDeferredLightShader::addLight(nTiled_world::PointLight* light) {
 //  Render related methods
 void BasicDeferredLightShader::init(Camera& camera) {
 	// Create shader program
+	// ------------------------------------------------------------------------
 	this->loadShaders();
 
 	// Create Frame Buffer Objects (FBO)
 	this->gBuffer.init();
 
+
 	// Setup for the geometry pass.
+	// ------------------------------------------------------------------------
 	// Setup perspective matrix
 	glm::mat4 perspective_matrix = camera.getPerspectiveMatrix();
+	glm::mat4 inverse_perspective_matrix = glm::inverse(perspective_matrix);
+
 	GLint p_cameraToClip = 
 		glGetUniformLocation(this->geometry_pass_sp,
 		                     "cameraToClipMatrix");
@@ -72,11 +77,145 @@ void BasicDeferredLightShader::init(Camera& camera) {
 		               1, GL_FALSE,
 		               glm::value_ptr(perspective_matrix));
 	glUseProgram(0);
+
+	// Setup for the light pass
+	// ------------------------------------------------------------------------
+	// Setup perspective matrices, viewport, depthrange
+	GLint p_perspectiveMatrix = glGetUniformLocation(this->light_pass_sp,
+			                                         "perspectiveMatrix");
+	GLint p_invPerspectiveMatrix = glGetUniformLocation(this->light_pass_sp,
+			                                            "invPerspectiveMatrix");
+
+	GLint p_viewport = glGetUniformLocation(this->light_pass_sp,
+		                                    "viewport");
+	GLint p_depthrange = glGetUniformLocation(this->light_pass_sp,
+		                                      "depthrange");
+
+	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, WIDTH, HEIGHT);
+	glm::vec2 depthrange = camera.getDepthrange();
+
+	glUseProgram(this->light_pass_sp);
+	glUniformMatrix4fv(p_perspectiveMatrix,
+		1, GL_FALSE,
+		glm::value_ptr(perspective_matrix));
+	glUniformMatrix4fv(p_invPerspectiveMatrix,
+		1, GL_FALSE,
+		glm::value_ptr(inverse_perspective_matrix));
+
+	glUniform4fv(p_viewport, 1, glm::value_ptr(viewport));
+	glUniform2fv(p_depthrange, 1, glm::value_ptr(depthrange));
+	glUseProgram(0);
+
+	// Setup unchangable light aspects
+	if (this->light_data.size() > 0) {
+		GLuint num_lights = this->light_data.size();
+
+		glGenBuffers(1, &this->light_ubo);
+		glBindBuffer(GL_UNIFORM_BUFFER,
+			         this->light_ubo);
+
+		glBufferData(GL_UNIFORM_BUFFER,
+			         sizeof((this->light_data[0])) * num_lights,
+			         this->light_data.data(),
+			         GL_DYNAMIC_DRAW);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+		// link UBO with the shader
+		GLint p_lightBlock = glGetUniformBlockIndex(this->light_pass_sp,
+			                                        "LightBlock");
+		glBindBufferBase(GL_UNIFORM_BUFFER, 0, this->light_ubo);
+		glUniformBlockBinding(this->light_pass_sp,
+			                  p_lightBlock,
+			                  0);
+
+		// add initial data
+		glBindBuffer(GL_UNIFORM_BUFFER, this->light_ubo);
+		GLvoid* p = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
+		memcpy(p,
+			   this->light_data.data(),
+			   sizeof(this->light_data[0]) * num_lights);
+		glUnmapBuffer(GL_UNIFORM_BUFFER);
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	}
+
+	// associate textures with sampler objects in glsl
+	GLint p_diffuseTexture = glGetUniformLocation(this->light_pass_sp,
+		                                          "diffuseTexture");
+	GLint p_normalTexture = glGetUniformLocation(this->light_pass_sp,
+		                                         "normalTexture");
+	GLint p_depthTexture = glGetUniformLocation(this->light_pass_sp,
+		                                        "depthTexture");
+
+	glUseProgram(this->light_pass_sp);
+	glUniform1i(p_diffuseTexture,
+		        GL_TEXTURE0);// +this->gBuffer.GBUFFER_TEXTURE_TYPE_DIFFUSE);
+	glUniform1i(p_normalTexture,
+		        GL_TEXTURE1);//GL_TEXTURE0 + this->gBuffer.GBUFFER_TEXTURE_TYPE_NORMAL);
+	glUniform1i(p_depthTexture,
+		        GL_TEXTURE2);//GL_TEXTURE0 + this->gBuffer.GBUFFER_NUM_TEXTURES);
+
+	glUseProgram(0);
+
+
+	// Create fullscreen quad
+	// ---------------------------------------------------------------------------
+	// Position data
+	GLfloat quad_vertices[] = {
+		-1.0f, -1.0f, 0.0f,
+		 1.0f, -1.0f, 0.0f,
+		 1.0f,  1.0f, 0.0f,
+		-1.0f,  1.0f, 0.0f
+	};
+
+	// Element data
+	GLushort elements[] = {
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	// setup buffers
+	GLuint vbo_handles[2];
+	glGenBuffers(2, vbo_handles);
+
+	GLuint position_buffer = vbo_handles[0];
+	GLuint element_buffer = vbo_handles[1];
+
+	// setup vertex array object
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+	// set up position buffer
+	glBindBuffer(GL_ARRAY_BUFFER, position_buffer);
+	glBufferData(GL_ARRAY_BUFFER,
+		         12 * sizeof(GLfloat),
+		         quad_vertices,
+		         GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	// set up element buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+		         6 * sizeof(GLushort),
+		         elements,
+		         GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_UNSIGNED_SHORT, GL_FALSE, 0, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	//glBindVertexArray(0);
+
+	this->fullscreen_quad = PipelineObject(vao,
+		                                   element_buffer,
+		                                   6, 
+		                                   glm::mat4(1.0f));
 }
 
 void BasicDeferredLightShader::render(Camera& camera) {
 	this->renderGeometryPass(camera);
-	this->renderLightPass();
+	this->renderLightPass(camera);
+	//this->renderBuffers();
 }
 
 void BasicDeferredLightShader::renderGeometryPass(Camera& camera) {
@@ -124,7 +263,39 @@ void BasicDeferredLightShader::renderGeometryPass(Camera& camera) {
 	//glDisable(GL_DEPTH_TEST);
 }
 
-void BasicDeferredLightShader::renderLightPass() {
+
+void BasicDeferredLightShader::renderLightPass(Camera& camera) {
+	// use light pass shader
+	glUseProgram(this->light_pass_sp);
+
+	// bind the texture for reading
+	this->gBuffer.bindForReading();
+
+	// Update light positions
+	glm::mat4 lookAt = camera.getLookAt();
+	glBindBuffer(GL_UNIFORM_BUFFER, this->light_ubo);
+	for (GLuint i = 0; i < this->light_data.size(); i++) {
+		glm::vec4 lightCameraCoordinates =
+			lookAt * this->light_data[i].positionCoordinates;
+
+		glBufferSubData(GL_UNIFORM_BUFFER,
+			            sizeof(this->light_data[0]) * i,
+			            sizeof(lightCameraCoordinates),
+			            glm::value_ptr(lightCameraCoordinates));
+	}
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	// Render elements
+	glBindVertexArray(this->fullscreen_quad.vao);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,
+		         this->fullscreen_quad.element_buffer);
+	glDrawElements(GL_TRIANGLES,
+		           this->fullscreen_quad.element_buffer_size,
+		           GL_UNSIGNED_SHORT, 0);
+	glUseProgram(0);
+}
+
+
+void BasicDeferredLightShader::renderBuffers() {
 	// TODO
 	// Restore default frame buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -165,7 +336,8 @@ void BasicDeferredLightShader::renderLightPass() {
 		                   0, 0, WIDTH, HEIGHT,
 		                   HalfWidth, HalfHeight, WIDTH, HEIGHT, 
 		                   GL_COLOR_BUFFER_BIT, GL_LINEAR);
-	
+
+		
 }
 
 void BasicDeferredLightShader::loadShaders() {
