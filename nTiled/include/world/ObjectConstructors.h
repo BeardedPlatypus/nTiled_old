@@ -39,6 +39,19 @@ namespace nTiled_world {
 		Mesh* obj_mesh;
 	};
 
+	
+	class AssImpConstructor : public PrimitiveConstructor {
+	public:
+		AssImpConstructor(World& world, std::string path);
+		Object* add(std::string name,
+			        std::string shader_id,
+			        glm::mat4 transformationMatrix);
+	private:
+		World& world;
+		Mesh* obj_mesh;
+	};
+
+
 	// ------------------------------------------------------------------------
 	//  Icosphere loader
 	class IcosphereConstructor : public PrimitiveConstructor {

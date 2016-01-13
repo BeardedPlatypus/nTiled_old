@@ -47,7 +47,8 @@ Camera::Camera(CameraControl& control, glm::vec3 camera_eye,
 		            glm::perspective(fovy, 
 		 			                 aspect, 
 								     z_near, 
-								     z_far))) {}
+								     z_far),
+		            glm::vec2(z_near, z_far))) {}
 
 /*
 Camera::~Camera() {
@@ -62,6 +63,10 @@ glm::mat4 Camera::getLookAt() {
 
 glm::mat4 Camera::getPerspectiveMatrix() {
 	return this->data.perspective_matrix;
+}
+
+glm::vec2 Camera::getDepthrange() {
+	return this->data.depthrange;
 }
 
 void Camera::update(ImGuiIO& io) {
