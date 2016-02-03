@@ -228,3 +228,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# nTiled specific
+# ignore libraries
+nTiled/lib/*
