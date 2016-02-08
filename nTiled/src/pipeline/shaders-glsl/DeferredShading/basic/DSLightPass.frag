@@ -1,4 +1,4 @@
-#version 450
+#version 440
 
 #define NUM_LIGHTS 0
 
@@ -37,6 +37,7 @@ uniform vec2 depthrange;
 
 //  Function definitions
 // ----------------------------------------------------------------------------
+/*
 vec4 calcCameraPositionFromWindowPosition(in vec3 windowSpace) {
 	vec3 ndcPos;
 	ndcPos.xy = ((2.0 * windowSpace.xy) - (2.0 * viewport.xy)) / (viewport.zw) - 1;
@@ -50,14 +51,30 @@ vec4 calcCameraPositionFromWindowPosition(in vec3 windowSpace) {
  
 	return invPerspectiveMatrix * clipPos;
 }
+*/
 
 vec2 calcTextureCoordinates() {
     return gl_FragCoord.xy / viewport.zw;
 }
 
+/*
 float linearizeDepth(in vec2 uv) {
   float z = texture(depthTexture, uv).x;
   return (2.0 * depthrange.x) / (depthrange.y + depthrange.x - z * (depthrange.y - depthrange.x));	
+}
+*/
+
+vec4 getCameraCoordinates(in vec2 texCoords) {
+    // Define the normalized device coordinates
+    vec3 device;
+    device.xy = (2.0f * ((gl_FragCoord.xy - vec2(0.5f, 0.5f) - viewport.xy) / viewport.zw)) - 1.0f;
+    device.z = 2.0f * texture(depthTexture, texCoords).x - 1.0f;
+
+    // Calculate actual coordinates
+    vec4 rawCoords = invPerspectiveMatrix * vec4(device, 1.0f);
+    vec4 coords = rawCoords / rawCoords.w;
+
+    return coords;
 }
 
 // ----------------------------------------------------------------------------
@@ -68,10 +85,11 @@ void main() {
     // ------------------------------------------------------------------------
   
     vec2 texCoords = calcTextureCoordinates();
-    vec3 W = vec3(gl_FragCoord.xy, texture(depthTexture, texCoords).x);
+    //vec3 W = vec3(gl_FragCoord.xy, texture(depthTexture, texCoords).x);
     //vec3 W = vec3(gl_FragCoord.xy, linearizeDepth(texCoords));
     
-    vec4 fragmentCameraPosition = calcCameraPositionFromWindowPosition(W);
+    //vec4 fragmentCameraPosition = calcCameraPositionFromWindowPosition(W);
+    vec4 fragmentCameraPosition = getCameraCoordinates(texCoords);
 
     // calculate lighting
     // ------------------------------------------------------------------------
@@ -88,7 +106,7 @@ void main() {
             float cosAngIncidence = dot(normalizedNormal, lightDir);
 
             cosAngIncidence = clamp(cosAngIncidence, 0, 1);
-            lightAcc += diffuseColor * lights[i].intensity * cosAngIncidence;
+            lightAcc += lights[i].intensity * cosAngIncidence;
         }
    
         fragmentColor = vec4((vec3(0.1f, 0.1f, 0.1f) + (lightAcc * 0.9)), 1.0);

@@ -1,4 +1,4 @@
-#version 450
+#version 440
 
 //#define MAX_N_LIGHTS 20
 #define NUM_LIGHTS 0

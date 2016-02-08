@@ -1,20 +1,21 @@
-#version 450
+#version 440
 
-// input buffers
+// input 
 // ----------------------------------------------------------------------------
 layout (location=0) in vec4 vertexPosition;
-layout (location=1) in vec3 vertexNormal; 
+layout (location=1) in vec3 vertexNormal;
 
 // output
 // ----------------------------------------------------------------------------
-out vec4 modelSpacePosition;
-out vec3 modelSpaceNormal;
+out vec4 cameraSpacePosition;
+out vec3 cameraSpaceNormal;
 
 // Variable definitions
 // ----------------------------------------------------------------------------
 // camera definition
 uniform mat4 cameraToClipMatrix;
 uniform mat4 modelToCameraMatrix;
+uniform mat4 invTransModelToCameraMatrix;
 
 // ----------------------------------------------------------------------------
 //  Main
@@ -26,6 +27,6 @@ void main() {
 	gl_Position = cameraToClipMatrix * vertexCameraCoordinates;
 
 	// pass values to fragment.
-    modelSpacePosition = vertexPosition;
-    modelSpaceNormal = vertexNormal;
+    cameraSpacePosition = vertexCameraCoordinates;
+    cameraSpaceNormal = (invTransModelToCameraMatrix * vec4(vertexNormal, 0.0f)).xyz;
 }
