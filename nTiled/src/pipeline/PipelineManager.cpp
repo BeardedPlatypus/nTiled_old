@@ -1,22 +1,48 @@
 #include "pipeline\PipelineManager.h"
 
+#define DEBUG
+
+#ifdef DEBUG
+#include <iostream>
+#endif // DEBUG
+
+
 using namespace nTiled_pipeline;
 using namespace nTiled_world;
 // ----------------------------------------------------------------------------
 //  Constructor
 // ----------------------------------------------------------------------------
-PipelineManager::PipelineManager(Pipeline& pipeline, World& world) : 
-	world(&world),
-	pipeline(&pipeline) {}
+PipelineManager::PipelineManager(nTiled_state::State& state) : 
+	state(state) {
+	/*
+	switch (state.pipeline_type) {
+	case PipelineType::Forward:
+	{
+#ifdef DEBUG
+		std::cout << "Forward Pipeline constructed" << std::endl;
+#endif // DEBUG
+
+		this->pipeline = new ForwardPipeline(state);
+	}
+	case PipelineType::Deferred:
+	{
+		// FIXME: this is broken do not use DeferredShading right now
+		this->pipeline = new DeferredPipeline(state, 
+			                                  ShaderId::ForwardAttenuated);
+	}
+	}
+	*/
+	this->pipeline = new ForwardPipeline(state);
+}
+
+PipelineManager::~PipelineManager() {
+	delete this->pipeline;
+}
 
 // ----------------------------------------------------------------------------
 //  Management Functions
 // ----------------------------------------------------------------------------
 void PipelineManager::init() {
-	// Initialise pipeline
-	// ---------------------------------------------------------------------------
-	this->pipeline->init(*(this->world));
-	
 	// Set up face culling
 	// ---------------------------------------------------------------------------
 	glEnable(GL_CULL_FACE);

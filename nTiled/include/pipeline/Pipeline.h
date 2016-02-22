@@ -7,6 +7,7 @@
 
 #include "camera\Camera.h"
 #include "world\World.h"
+#include "state\State.h"
 
 #include "pipeline\PipelineObject.h"
 #include "pipeline\shaders\Shader.h"
@@ -17,19 +18,14 @@ namespace nTiled_pipeline {
 	// ---------------------------------------------------------------------------
 	class Pipeline {
 	public:
-		Pipeline(Camera& camera);
+		Pipeline(nTiled_state::State& state);
 		virtual ~Pipeline() {}
 		// Render Methods
-		virtual void init(nTiled_world::World& world) = 0;
 		virtual void render() = 0;
 
 		// Property Methods
-		Camera getActiveCamera();
-		void setActiveCamera(Camera& camera);
-
+		nTiled_state::State& state;
 		virtual void addObject(nTiled_world::Object& object) = 0;
-	protected:
-		Camera* camera;
 	};
 
 	// ----------------------------------------------------------------------------
@@ -37,11 +33,9 @@ namespace nTiled_pipeline {
 	// ----------------------------------------------------------------------------
 	class ForwardPipeline : public Pipeline {
 	public:
-		ForwardPipeline(Camera& camera, 
-			            std::vector<ShaderBatch*> shaders);
+		ForwardPipeline(nTiled_state::State& state);
 
 		// Render Methods
-		void init(nTiled_world::World& world);
 		void render();
 
 		// Property Methods
@@ -50,7 +44,7 @@ namespace nTiled_pipeline {
 	private:		
 		// Render methods.
 		std::vector<PipelineObject> objects;
-		std::map<std::string, ShaderBatch*> shaders;
+		std::map<ShaderId, ShaderBatch*> shaders;
 	};
 
 	// ----------------------------------------------------------------------------
@@ -58,11 +52,10 @@ namespace nTiled_pipeline {
 	// ----------------------------------------------------------------------------
 	class DeferredPipeline : public Pipeline {
 	public:
-		DeferredPipeline(Camera& camera,
-			             ShaderBatch& shader);
+		DeferredPipeline(nTiled_state::State& state,
+			             ShaderId shader_id);
 
 		// Render Methods
-		void init(nTiled_world::World& world);
 		void render();
 
 		// Property Methods

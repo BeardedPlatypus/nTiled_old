@@ -1,20 +1,19 @@
 #pragma once
 
+#include "state\State.h"
 #include "pipeline\Pipeline.h"
-#include "world\World.h"
 
 namespace nTiled_pipeline {
 	class PipelineManager {
 	public:
-		PipelineManager(Pipeline& pipeline, nTiled_world::World& world);
+		PipelineManager(nTiled_state::State& state);
+		~PipelineManager();
+
 
 		void init();
 		void render();
 	private:
 		Pipeline* pipeline;
-		nTiled_world::World* world;
-
-		GLuint vao;
-		GLuint element_buffer;
+		nTiled_state::State& state;
 	};
 }
