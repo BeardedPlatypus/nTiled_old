@@ -1,21 +1,22 @@
 #include "gui\GuiManager.h"
 
 #include <glm\gtx\string_cast.hpp>
+#include <GLFW/glfw3.h>
 
 // ----------------------------------------------------------------------------
 //  Constructor
 // ----------------------------------------------------------------------------
 nTiled_gui::GuiManager::GuiManager(ImVec4 clear_color, 
-	                               Camera& camera) :
+	                               nTiled_state::State& state) :
 	clear_color(clear_color),
-	active_camera(&camera),
+	state(state),
 	show_test_window(false),
 	show_another_window(false),
 	camera_has_focus(false),
 	gui_elements(std::vector<GuiElement*>()){}
 
-nTiled_gui::GuiManager::GuiManager(Camera& camera) :
-	nTiled_gui::GuiManager(ImColor(114, 144, 154), camera) {}
+nTiled_gui::GuiManager::GuiManager(nTiled_state::State& state) :
+	nTiled_gui::GuiManager(ImColor(114, 144, 154), state) {}
 
 // ----------------------------------------------------------------------------
 //  Member functions
@@ -23,7 +24,7 @@ nTiled_gui::GuiManager::GuiManager(Camera& camera) :
 void nTiled_gui::GuiManager::init(GLFWwindow& window) {
 	ImGui_ImplGlfwGL3_Init(&window, true);
 	
-	this->gui_elements.push_back(&(CameraElement(*(this->active_camera))));
+	this->gui_elements.push_back(&(CameraElement(this->state.camera)));
 }
 
 void nTiled_gui::GuiManager::update() {
@@ -33,21 +34,19 @@ void nTiled_gui::GuiManager::update() {
 
 	ImGuiIO& io = ImGui::GetIO();
 	// Handle updates to Camera/view
-	if (this->active_camera) {
-		if ((!io.WantCaptureMouse || !io.WantCaptureKeyboard) && io.MouseDown[0]) {
-			// we assume that we're interested in seeing if we need to update the
-			// camera whenever none of the GUI elements is active.
-				if (camera_has_focus) {
-					this->active_camera->update(io);
-				}
-				else {
-					this->active_camera->toFocus(io);
-					this->camera_has_focus = true;
-				}
+	if ((!io.WantCaptureMouse || !io.WantCaptureKeyboard) && io.MouseDown[0]) {
+		// we assume that we're interested in seeing if we need to update the
+		// camera whenever none of the GUI elements is active.
+		if (camera_has_focus) {
+			this->state.camera.update(io);
 		}
-		else if (this->camera_has_focus) {
-			this->camera_has_focus = false;
+		else {
+			this->state.camera.toFocus(io);
+			this->camera_has_focus = true;
 		}
+	}
+	else if (this->camera_has_focus) {
+		this->camera_has_focus = false;
 	}
 
 	// Draw gui elements.

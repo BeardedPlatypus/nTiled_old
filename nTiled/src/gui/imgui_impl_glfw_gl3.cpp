@@ -1,14 +1,14 @@
 // ImGui GLFW binding with OpenGL3 + shaders
-// You can copy and use unmodified imgui_impl_* files in your project. 
+// You can copy and use unmodified imgui_impl_* files in your project. See main.cpp for an example of using this.
 // If you use this binding you'll need to call 4 functions: ImGui_ImplXXXX_Init(), ImGui_ImplXXXX_NewFrame(), ImGui::Render() and ImGui_ImplXXXX_Shutdown().
-// See main.cpp for an example of using this.
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
 // https://github.com/ocornut/imgui
 
 #include <imgui.h>
 #include "gui/imgui_impl_glfw_gl3.h"
 
-// GLAD/GLFW
-#include <glad/glad.h>
+// GL3W/GLFW
+#include <glad\glad.h>
 #include <GLFW/glfw3.h>
 #ifdef _WIN32
 #undef APIENTRY
@@ -60,11 +60,12 @@ void ImGui_ImplGlfwGL3_RenderDrawLists(ImDrawData* draw_data)
 
     // Handle cases of screen coordinates != from framebuffer coordinates (e.g. retina displays)
     ImGuiIO& io = ImGui::GetIO();
-    float fb_height = io.DisplaySize.y * io.DisplayFramebufferScale.y;
+    int fb_width = (int)(io.DisplaySize.x * io.DisplayFramebufferScale.x);
+    int fb_height = (int)(io.DisplaySize.y * io.DisplayFramebufferScale.y);
     draw_data->ScaleClipRects(io.DisplayFramebufferScale);
 
     // Setup viewport, orthographic projection matrix
-    glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
+    glViewport(0, 0, (GLsizei)fb_width, (GLsizei)fb_height);
     const float ortho_projection[4][4] =
     {
         { 2.0f/io.DisplaySize.x, 0.0f,                   0.0f, 0.0f },
@@ -161,16 +162,17 @@ void ImGui_ImplGlfwGL3_CharCallback(GLFWwindow*, unsigned int c)
         io.AddInputCharacter((unsigned short)c);
 }
 
-void ImGui_ImplGlfwGL3_CreateFontsTexture()
+bool ImGui_ImplGlfwGL3_CreateFontsTexture()
 {
-    ImGuiIO& io = ImGui::GetIO();
-
     // Build texture atlas
+    ImGuiIO& io = ImGui::GetIO();
     unsigned char* pixels;
     int width, height;
     io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);   // Load as RGBA 32-bits for OpenGL3 demo because it is more likely to be compatible with user's existing shader.
 
-    // Create OpenGL texture
+    // Upload texture to graphics system
+    GLint last_texture;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &last_texture);
     glGenTextures(1, &g_FontTexture);
     glBindTexture(GL_TEXTURE_2D, g_FontTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -180,9 +182,10 @@ void ImGui_ImplGlfwGL3_CreateFontsTexture()
     // Store our identifier
     io.Fonts->TexID = (void *)(intptr_t)g_FontTexture;
 
-    // Cleanup (don't clear the input data if you want to append new fonts later)
-    io.Fonts->ClearInputData();
-    io.Fonts->ClearTexData();
+    // Restore state
+    glBindTexture(GL_TEXTURE_2D, last_texture);
+
+    return true;
 }
 
 bool ImGui_ImplGlfwGL3_CreateDeviceObjects()
