@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\programs\openGL-wrappers\glad\src\glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\nTiled.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -25,15 +22,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\camera\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\programs\openGL-wrappers\imgui\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\programs\openGL-wrappers\imgui\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\programs\openGL-wrappers\imgui\imgui_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\camera\CameraData.cpp">
@@ -48,13 +36,7 @@
     <ClCompile Include="src\gui\GuiManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pipeline\PipelineManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\world\World_structs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\world\ObjectsFromOBJ.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\gui\GuiElement.cpp">
@@ -78,15 +60,6 @@
     <ClCompile Include="src\pipeline\PipeLineObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pipeline\shaders\BasicForwardLightShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\pipeline\shaders\BasicDeferredLightShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\pipeline\shaders\DeferredShading\GBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\pipeline\ForwardPipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -94,6 +67,54 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\pipeline\DeferredPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\GL\src\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\imgui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\ObjectConstructors\AssImpConstructor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\ShaderFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\forward-shading\debug\DebugLightShaders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\forward-shading\BasicForwardLightShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\forward-shading\TiledForwardShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\state\State.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\state\GeometryParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\PipelineManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\state\LightParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\forward-shading\SolidShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\deferred-shading\BasicDeferredLightShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\deferred-shading\GBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -111,9 +132,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\gui\imgui_impl_glfw_gl3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pipeline\PipelineManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\gui\GuiManager.h">
@@ -146,25 +164,47 @@
     <ClInclude Include="include\pipeline\PipelineObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\pipeline\shaders\BasicForwardLightShader.h">
+    <ClInclude Include="include\pipeline\shaders\deferred-shading\GBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\pipeline\shaders\BasicDeferredLightShader.h">
+    <ClInclude Include="include\pipeline\shaders\forward-shading\debug\DebugLightShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\pipeline\shaders\DeferredShading\GBuffer.h">
+    <ClInclude Include="include\pipeline\shaders\forward-shading\BasicForwardLightShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\shaders\ShaderFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\shaders\ShaderDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\state\State.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\PipelineManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\PipelineType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\shaders\deferred-shading\BasicDeferredLightShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
-    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLights.frag" />
-    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLights.vert" />
-    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLightsFrag.frag" />
-    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLightsFrag.vert" />
-    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSGeometryPass.frag" />
-    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSGeometryPass.vert" />
-    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSLightPass.frag" />
-    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSLightPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\basic\basicForwardMultipleLights.frag" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\basic\basicForwardMultipleLights.vert" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\basic\basicForwardMultipleLightsFrag.frag" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\basic\basicForwardMultipleLightsFrag.vert" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\forward-attenuated\basicForwardMultipleLightsFrag.frag" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\forward-attenuated\basicForwardMultipleLightsFrag.vert" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\forward-tiled\forward-tiled.frag" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\forward-tiled\forward-tiled.vert" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSGeometryPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSGeometryPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSLightPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSLightPass.vert" />
   </ItemGroup>
 </Project>

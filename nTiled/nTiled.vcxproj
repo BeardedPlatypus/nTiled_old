@@ -89,13 +89,15 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\data\Documents\Visual Studio 2015\Projects\nTiled\nTiled\include;D:\programs\openGL-wrappers\glm;D:\programs\openGL-wrappers\glfw-3.1.2\include;D:\programs\openGL-wrappers\glad\include;D:\programs\openGL-wrappers\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\rapidjson\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\glm;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\glfw-3.1.2\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\GL\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\assimp\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\programs\openGL-wrappers\glfw-3.1.2\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\assimp\lib\Release;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\glfw-3.1.2\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glu32.lib;assimp-vc140-mt.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -106,10 +108,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\assimp\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\imgui;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\glm;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\glfw-3.1.2\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\GL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\assimp\lib\Release;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\glfw-3.1.2\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;assimp-vc140-mt.lib;zlibstatic.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -122,15 +127,15 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\data\Documents\Visual Studio 2015\Projects\nTiled\nTiled\include;D:\programs\openGL-wrappers\glm;D:\programs\openGL-wrappers\glfw-3.1.2\include;D:\programs\openGL-wrappers\glad\include;D:\programs\openGL-wrappers\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\glm;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\glfw-3.1.2\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\GL\include;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\programs\openGL-wrappers\glfw-3.1.2\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\assimp\lib\Release;C:\Users\Monthy\Documents\projects\thesis\implementation\nTiled\lib\glfw-3.1.2\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc140-mt.lib;zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,10 +157,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\programs\openGL-wrappers\glad\src\glad.c" />
-    <ClCompile Include="..\..\..\..\..\..\programs\openGL-wrappers\imgui\imgui.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\programs\openGL-wrappers\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\programs\openGL-wrappers\imgui\imgui_draw.cpp" />
+    <ClCompile Include="lib\GL\src\glad.c" />
+    <ClCompile Include="lib\imgui\imgui.cpp" />
+    <ClCompile Include="lib\imgui\imgui_demo.cpp" />
+    <ClCompile Include="lib\imgui\imgui_draw.cpp" />
     <ClCompile Include="src\camera\Camera.cpp" />
     <ClCompile Include="src\camera\CameraData.cpp" />
     <ClCompile Include="src\camera\CameraControl.cpp" />
@@ -169,14 +174,21 @@
     <ClCompile Include="src\pipeline\PipelineManager.cpp" />
     <ClCompile Include="src\pipeline\PipeLineObject.cpp" />
     <ClCompile Include="src\pipeline\shader-util\LoadShaders.cpp" />
-    <ClCompile Include="src\pipeline\shaders\BasicDeferredLightShader.cpp" />
-    <ClCompile Include="src\pipeline\shaders\BasicForwardLightShader.cpp" />
-    <ClCompile Include="src\pipeline\shaders\DeferredShading\GBuffer.cpp" />
+    <ClCompile Include="src\pipeline\shaders\deferred-shading\BasicDeferredLightShader.cpp" />
+    <ClCompile Include="src\pipeline\shaders\deferred-shading\GBuffer.cpp" />
+    <ClCompile Include="src\pipeline\shaders\forward-shading\BasicForwardLightShader.cpp" />
+    <ClCompile Include="src\pipeline\shaders\forward-shading\debug\DebugLightShaders.cpp" />
+    <ClCompile Include="src\pipeline\shaders\forward-shading\SolidShader.cpp" />
+    <ClCompile Include="src\pipeline\shaders\forward-shading\TiledForwardShader.cpp" />
+    <ClCompile Include="src\pipeline\shaders\ShaderFactory.cpp" />
+    <ClCompile Include="src\state\GeometryParser.cpp" />
+    <ClCompile Include="src\state\LightParser.cpp" />
+    <ClCompile Include="src\state\State.cpp" />
     <ClCompile Include="src\world\LightConstructors\PointLightConstructor.cpp" />
     <ClCompile Include="src\world\Lights.cpp" />
+    <ClCompile Include="src\world\ObjectConstructors\AssImpConstructor.cpp" />
     <ClCompile Include="src\world\ObjectConstructors\IcosphereConstructor.cpp" />
     <ClCompile Include="src\world\ObjectConstructors\ObjConstructor.cpp" />
-    <ClCompile Include="src\world\ObjectsFromOBJ.cpp" />
     <ClCompile Include="src\world\ObjectConstructors\CubeConstructor.cpp" />
     <ClCompile Include="src\world\World_structs.cpp" />
   </ItemGroup>
@@ -190,11 +202,16 @@
     <ClInclude Include="include\pipeline\Pipeline.h" />
     <ClInclude Include="include\pipeline\PipelineManager.h" />
     <ClInclude Include="include\pipeline\PipelineObject.h" />
+    <ClInclude Include="include\pipeline\PipelineType.h" />
     <ClInclude Include="include\pipeline\shader-util\LoadShaders.h" />
-    <ClInclude Include="include\pipeline\shaders\BasicDeferredLightShader.h" />
-    <ClInclude Include="include\pipeline\shaders\BasicForwardLightShader.h" />
-    <ClInclude Include="include\pipeline\shaders\DeferredShading\GBuffer.h" />
+    <ClInclude Include="include\pipeline\shaders\deferred-shading\BasicDeferredLightShader.h" />
+    <ClInclude Include="include\pipeline\shaders\forward-shading\BasicForwardLightShader.h" />
+    <ClInclude Include="include\pipeline\shaders\deferred-shading\GBuffer.h" />
+    <ClInclude Include="include\pipeline\shaders\forward-shading\debug\DebugLightShader.h" />
     <ClInclude Include="include\pipeline\shaders\Shader.h" />
+    <ClInclude Include="include\pipeline\shaders\ShaderDefinitions.h" />
+    <ClInclude Include="include\pipeline\shaders\ShaderFactory.h" />
+    <ClInclude Include="include\state\State.h" />
     <ClInclude Include="include\world\LightConstructor.h" />
     <ClInclude Include="include\world\Lights.h" />
     <ClInclude Include="include\world\Object.h" />
@@ -203,14 +220,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
-    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSGeometryPass.frag" />
-    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSGeometryPass.vert" />
-    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSLightPass.frag" />
-    <None Include="src\pipeline\shaders-glsl\DeferredShading\DSLightPass.vert" />
-    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLights.frag" />
-    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLights.vert" />
-    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLightsFrag.frag" />
-    <None Include="src\pipeline\shaders-glsl\ForwardShading\basicForwardMultipleLightsFrag.vert" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSGeometryPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSGeometryPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSLightPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSLightPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\basic\basicForwardMultipleLights.frag" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\basic\basicForwardMultipleLights.vert" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\basic\basicForwardMultipleLightsFrag.frag" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\basic\basicForwardMultipleLightsFrag.vert" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\forward-attenuated\basicForwardMultipleLightsFrag.frag" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\forward-attenuated\basicForwardMultipleLightsFrag.vert" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\forward-tiled\forward-tiled.frag" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\forward-tiled\forward-tiled.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
