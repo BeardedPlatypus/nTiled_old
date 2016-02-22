@@ -33,14 +33,15 @@ Camera::Camera(CameraControl& control, glm::mat4 lookAt_matrix,
 		                                                       z_far))) {}
 
 */
-Camera::Camera(CameraControl& control, glm::vec3 camera_eye,
-	                                   glm::vec3 camera_center,
-	                                   glm::vec3 camera_up,
-	                                   float fovy,
-	                                   float aspect,
-	                                   float z_near,
-	                                   float z_far) :
-	control(&control),
+Camera::Camera(CameraControl* control, 
+	           glm::vec3 camera_eye,
+	           glm::vec3 camera_center,
+	           glm::vec3 camera_up,
+	           float fovy,
+	           float aspect,
+	           float z_near,
+	           float z_far) :
+	control(new TurnTableCameraControl()),
 	data(CameraData(glm::lookAt(camera_eye,
 		                        camera_center,
 		                        camera_up), 
@@ -50,9 +51,18 @@ Camera::Camera(CameraControl& control, glm::vec3 camera_eye,
 								     z_far),
 		            glm::vec2(z_near, z_far))) {}
 
+Camera::Camera() : Camera::Camera(new TurnTableCameraControl(),
+	                              glm::vec3(-1.0, 0.0, 0.0),
+	                              glm::vec3(0.0),
+	                              glm::vec3(0.0, 1.0, 0.0),
+	                              45.0,
+	                              1.0,
+	                              1.0,
+	                              50.0) {}
+
 /*
 Camera::~Camera() {
-	delete &(this->data);
+	delete this->control;
 }
 */
 

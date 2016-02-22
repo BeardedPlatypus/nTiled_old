@@ -48,3 +48,25 @@ void TurnTableCameraControl::update(CameraData &data, ImGuiIO& io) {
 void TurnTableCameraControl::activate(ImGuiIO& io) {
 	this->pos_prev = io.MousePos;
 }
+
+
+// ----------------------------------------------------------------------------
+//  AutomaticRotateCameraControl
+// ----------------------------------------------------------------------------
+// Constructors
+AutomaticRotateCameraControl::AutomaticRotateCameraControl(double rotation_speed) :
+	rotation_speed(rotation_speed) {} // rotation speed in degrees per second
+
+AutomaticRotateCameraControl::AutomaticRotateCameraControl() :
+	AutomaticRotateCameraControl(60.0) {}
+
+// ----------------------------------------------------------------------------
+//  Methods
+void AutomaticRotateCameraControl::update(CameraData &data, ImGuiIO& io) {
+	// look up time between last two calls
+	// assume rotation along the z-axis with camera speed time
+	// multiply old camera data with the matrix based on the time
+}
+
+void AutomaticRotateCameraControl::activate(ImGuiIO& io) {
+}

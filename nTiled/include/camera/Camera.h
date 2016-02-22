@@ -1,6 +1,5 @@
 #pragma once
 
-#include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
 
 #include "camera\CameraControl.h"
@@ -22,13 +21,15 @@ public:
 								   float z_far);
 	*/
 	// Constructor
-	Camera(CameraControl& control, glm::vec3 camera_eye,
-								   glm::vec3 camera_center,
-								   glm::vec3 camera_up,
-								   float fovy,
-								   float aspect,
-								   float z_near,
-								   float z_far);
+	Camera(CameraControl* control, 
+		   glm::vec3 camera_eye,
+		   glm::vec3 camera_center,
+		   glm::vec3 camera_up,
+		   float fovy,
+		   float aspect,
+		   float z_near,
+		   float z_far);
+	Camera();
 	// Destructor
 	//~Camera();
 

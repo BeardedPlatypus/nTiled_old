@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GLFW\glfw3.h>
-
 #include "camera\CameraData.h"
 #include <imgui.h>
 
@@ -35,4 +33,22 @@ public:
 private:
 	double sensitivity;
 	ImVec2 pos_prev;
+};
+
+class AutomaticRotateCameraControl : public CameraControl {
+public:
+	// ---------------------------------------------------------------------------
+	//  Constructors
+	// ---------------------------------------------------------------------------
+	AutomaticRotateCameraControl();
+	AutomaticRotateCameraControl(double rotation_speed);
+
+	// ---------------------------------------------------------------------------
+	//  Member functions
+	// ---------------------------------------------------------------------------
+	void update(CameraData& data, ImGuiIO& io);
+	void activate(ImGuiIO& io);
+
+private:
+	double rotation_speed;
 };
