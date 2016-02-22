@@ -25,11 +25,13 @@ namespace nTiled_world {
 			     glm::vec3 intensity,
 			     float cutoff_radius,
 			     bool is_emitting,
-			     std::string light_volume_shader_id,
 			     glm::mat4 transformationMatrix);
 
 	private:
 		World& world;
-		IcosphereConstructor icosphere_constructor;
+
+		// Object constructors
+		AssImpConstructor core_constructor;
+		AssImpConstructor cutoff_constructor;
 	};
 }
