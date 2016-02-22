@@ -49,6 +49,8 @@ GLuint compileShader(GLenum shaderType, const std::string& shaderRaw) {
 			std::cerr << log << std::endl;
 			delete[] log;
 		}
+		std::cout << std::endl;
+		std::cout << shaderRaw << std::endl;
 		throw std::runtime_error(std::string("Can't compile the shader defined in file: "));
 	}
 	return shader;
