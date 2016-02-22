@@ -32,7 +32,8 @@ PipelineManager::PipelineManager(nTiled_state::State& state) :
 	}
 	}
 	*/
-	this->pipeline = new ForwardPipeline(state);
+	this->pipeline = new ForwardDebugPipeline(state);
+	//this->pipeline = new ForwardPipeline(state);
 }
 
 PipelineManager::~PipelineManager() {

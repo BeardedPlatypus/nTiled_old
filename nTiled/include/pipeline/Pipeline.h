@@ -47,6 +47,30 @@ namespace nTiled_pipeline {
 		std::map<ShaderId, ShaderBatch*> shaders;
 	};
 
+	// Let's be silly
+	class ForwardDebugPipeline : public Pipeline {
+	public:
+		ForwardDebugPipeline(nTiled_state::State& state);
+
+		// Render Methods
+		void render();
+
+		// Property Methods
+		void addObject(nTiled_world::Object& object);
+
+	private:
+		// Render methods.
+		std::vector<PipelineObject> objects;
+		std::map<ShaderId, ShaderBatch*> shaders;
+
+		// Additional Frame buffer objects 
+		GLuint p_fbo;
+		GLuint p_pass_result;
+
+		PipelineObject fullscreen_quad;
+		GLuint result_pass_sp;
+	};
+
 	// ----------------------------------------------------------------------------
 	//  Deferred Pipeline
 	// ----------------------------------------------------------------------------
