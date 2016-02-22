@@ -18,7 +18,7 @@ Mesh::Mesh(std::vector<glm::vec4> vertices,
 Object::Object(std::string name,
  	           Mesh mesh,
 	           glm::mat4 transformationMatrix,
-	           std::string shader_id,
+			   nTiled_pipeline::ShaderId shader_id,
 	           bool is_rendered) :
 	name(name),
 	mesh(mesh),
@@ -29,7 +29,7 @@ Object::Object(std::string name,
 
 Object::Object(std::string name,
 	           Mesh mesh,
-	           std::string shader_id,
+			   nTiled_pipeline::ShaderId shader_id,
 	           glm::mat4 transformationMatrix) :
 	Object(name, mesh, transformationMatrix, shader_id, true) {}
 

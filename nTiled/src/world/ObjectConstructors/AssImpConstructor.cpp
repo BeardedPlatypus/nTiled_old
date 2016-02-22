@@ -8,6 +8,8 @@
 	
 using namespace nTiled_world;
 
+AssImpConstructor::AssImpConstructor() : world(World()) {}
+
 AssImpConstructor::AssImpConstructor(World& world, std::string path) : world(world) {
 
 	// Import file with AssImp
@@ -69,7 +71,7 @@ AssImpConstructor::AssImpConstructor(World& world, std::string path) : world(wor
 }
 
 Object* AssImpConstructor::add(std::string name,
-	                           std::string shader_id,
+	                           nTiled_pipeline::ShaderId shader_id,
 	                           glm::mat4 transformationMatrix) {
 	int i = this->world.addObject(Object(name,
 		                                 *(this->obj_mesh),

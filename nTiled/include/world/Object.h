@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+#include "pipeline\shaders\ShaderDefinitions.h"
+
 namespace nTiled_world {
 	// ------------------------------------------------------------------------
 	//  World structs
@@ -33,12 +35,12 @@ namespace nTiled_world {
 	public:
 		Object(std::string name,
 			nTiled_world::Mesh mesh,
-			std::string shader_id,
+			nTiled_pipeline::ShaderId shader_id,
 			glm::mat4 transformationMatrix);
 		Object(std::string name,
 			nTiled_world::Mesh mesh,
 			glm::mat4 transformationMatrix,
-			std::string shader_id,
+			nTiled_pipeline::ShaderId shader_id,
 			bool is_rendered);
 
 
@@ -46,7 +48,7 @@ namespace nTiled_world {
 		const nTiled_world::Mesh mesh;
 		glm::mat4 transformationMatrix;
 
-		std::string shader_id;
+		nTiled_pipeline::ShaderId shader_id;
 
 		bool is_rendered;
 	private:

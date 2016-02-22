@@ -90,7 +90,7 @@ CubeConstructor::CubeConstructor(World& world) : world(world) {
 // ----------------------------------------------------------------------------
 //  Object construction methods.
 Object* CubeConstructor::add(std::string name,
-	                         std::string shader_id,
+	                         nTiled_pipeline::ShaderId shader_id,
 	                         glm::mat4 transformationMatrix) {
 	int i = this->world.addObject(Object(name, 
 		                          *(this->cube), 

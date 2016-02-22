@@ -8,7 +8,7 @@ namespace nTiled_world {
 	public:
 		virtual ~PrimitiveConstructor() {}
 		virtual Object* add(std::string name,
-			                std::string shader_id,
+							nTiled_pipeline::ShaderId shader_id,
 			                glm::mat4 transformationMatrix) = 0;
 	};
 
@@ -18,7 +18,7 @@ namespace nTiled_world {
 	public:
 		CubeConstructor(World& world);
 		Object* add(std::string name, 
-			        std::string shader_id,
+					nTiled_pipeline::ShaderId shader_id,
 			        glm::mat4 transformationMatrix);
 
 	private:
@@ -32,7 +32,7 @@ namespace nTiled_world {
 	public: 
 		ObjConstructor(World& world, std::string path);
 		Object* add(std::string name,
-			        std::string shader_id,
+					nTiled_pipeline::ShaderId shader_id,
 			        glm::mat4 transformationMatrix);
 	private:
 		World& world;
@@ -42,9 +42,10 @@ namespace nTiled_world {
 	
 	class AssImpConstructor : public PrimitiveConstructor {
 	public:
+		AssImpConstructor(); // ugly but tuple requires empty constructor does nothing, do not use
 		AssImpConstructor(World& world, std::string path);
 		Object* add(std::string name,
-			        std::string shader_id,
+					nTiled_pipeline::ShaderId shader_id,
 			        glm::mat4 transformationMatrix);
 	private:
 		World& world;
@@ -58,7 +59,7 @@ namespace nTiled_world {
 	public:
 		IcosphereConstructor(World& world);
 		Object* add(std::string name, 
-			        std::string shader_id,
+					nTiled_pipeline::ShaderId shader_id,
 			        glm::mat4 transformationMatrix);
 	private:
 		World& world;
