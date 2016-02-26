@@ -25,7 +25,12 @@ using namespace nTiled_pipeline;
 ForwardDebugPipeline::ForwardDebugPipeline(nTiled_state::State& state) :
 	Pipeline(state),
 	objects(std::vector<PipelineObject>()),
-	shaders(std::map<ShaderId, ShaderBatch*>()) {
+	shaders(std::map<ShaderId, ShaderBatch*>()),
+	quad_writer(ConstantQuadWriter()),
+	draw_pretty_squares(LightProjectorQuadWriter(state)),
+	projector(BoxProjector()),
+	manager(TiledLightManager(state, 16, 16, this->projector)),
+	tiles_display(LightTilesDisplay(this->manager)) {
 	std::cout << "forward pipeline" << std::endl;
 	std::cout << "number of objects: " << state.world.objects.size() << std::endl;
 	
@@ -101,10 +106,10 @@ ForwardDebugPipeline::ForwardDebugPipeline(nTiled_state::State& state) :
 	// ---------------------------------------------------------------------------
 	// Position data
 	GLfloat quad_vertices[] = {
-		-1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,
-		 1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f
+		-1.0f, -1.0f, 1.0f,
+		 1.0f, -1.0f, 1.0f,
+		 1.0f,  1.0f, 1.0f,
+		-1.0f,  1.0f, 1.0f
 	};
 
 	// Element data
@@ -187,6 +192,8 @@ ForwardDebugPipeline::ForwardDebugPipeline(nTiled_state::State& state) :
 		        GL_TEXTURE0);
 	glUseProgram(0);
 
+	// ------------------------------------------------------------------------
+	//this->quad_writer.addQuad(glm::vec4(0.0, 0.0, 1.0, 1.0));
 }
 
 // ----------------------------------------------------------------------------
@@ -227,6 +234,11 @@ void ForwardDebugPipeline::render() {
 		           this->fullscreen_quad.element_buffer_size,
 		           GL_UNSIGNED_SHORT, 0);
 	glUseProgram(0);
+	//this->quad_writer.render();
+
+	this->manager.constructGridFrame();
+	this->tiles_display.render();
+	this->draw_pretty_squares.render();
 }
 
 // ----------------------------------------------------------------------------

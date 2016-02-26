@@ -12,6 +12,11 @@
 #include "pipeline\PipelineObject.h"
 #include "pipeline\shaders\Shader.h"
 
+// FIXME TEST REMOVE
+#include "pipeline\debug-display\ConstantQuadWriter.h"
+#include "pipeline\debug-display\LightProjectorQuadWriter.h"
+#include "pipeline\debug-display\LightTilesDisplay.h"
+
 namespace nTiled_pipeline {
 	// ---------------------------------------------------------------------------
 	//  Pipeline Base class
@@ -69,6 +74,14 @@ namespace nTiled_pipeline {
 
 		PipelineObject fullscreen_quad;
 		GLuint result_pass_sp;
+
+		// FIXME TEST REMOVE
+		ConstantQuadWriter quad_writer;
+		LightProjectorQuadWriter draw_pretty_squares;
+
+		BoxProjector projector;
+		TiledLightManager manager;
+		LightTilesDisplay tiles_display;
 	};
 
 	// ----------------------------------------------------------------------------
