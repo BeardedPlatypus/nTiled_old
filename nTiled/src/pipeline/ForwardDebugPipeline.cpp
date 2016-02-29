@@ -5,6 +5,8 @@
 #include "pipeline\PipelineObject.h"
 #include "pipeline\shader-util\LoadShaders.h"
 
+#include "pipeline\shaders\ShaderFactory.h"
+
 #include <set>
 #include <iostream>
 #include <fstream>
@@ -29,7 +31,7 @@ ForwardDebugPipeline::ForwardDebugPipeline(nTiled_state::State& state) :
 	quad_writer(ConstantQuadWriter()),
 	draw_pretty_squares(LightProjectorQuadWriter(state)),
 	projector(BoxProjector()),
-	manager(TiledLightManager(state, 16, 16, this->projector)),
+	manager(TiledLightManager(state, 1200, 1200, this->projector)),
 	tiles_display(LightTilesDisplay(this->manager)) {
 	std::cout << "forward pipeline" << std::endl;
 	std::cout << "number of objects: " << state.world.objects.size() << std::endl;
@@ -248,9 +250,10 @@ void ForwardDebugPipeline::addObject(nTiled_world::Object& object) {
 	// ------------------------------------------------------------------------
 	if (this->shaders.count(object.shader_id) == 0) {
 		// FIXME Rework this together with shaderfactor
+		ShaderFactory shader_factory = ShaderFactory(this->state);
 		this->shaders.insert(std::pair<ShaderId, ShaderBatch*>(
 			object.shader_id,
-			this->state.shader_factory.getShader(object.shader_id)));
+			shader_factory.getShader(object.shader_id, this->state)));
 	}
 
 	// Add object to shader

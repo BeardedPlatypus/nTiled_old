@@ -1,4 +1,4 @@
-#include "pipeline\shaders\forward-shading\debug\DebugLightShader.h"
+#include "pipeline\shaders\forward-shading\debug-shaders\DebugLightShader.h"
 
 #include <glm/gtc/type_ptr.hpp>
 

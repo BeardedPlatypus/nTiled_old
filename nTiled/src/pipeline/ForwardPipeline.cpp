@@ -4,6 +4,9 @@
 #include "pipeline\PipelineObject.h"
 #include "pipeline\shader-util\LoadShaders.h"
 
+#include "pipeline\shaders\ShaderFactory.h"
+
+#include <set>
 #include <iostream>
 
 using namespace nTiled_pipeline;
@@ -44,9 +47,17 @@ ForwardPipeline::ForwardPipeline(nTiled_state::State& state) :
 // ----------------------------------------------------------------------------
 //  Render functions
 void ForwardPipeline::render() {
+	// FIXME make this nice and incorporate with gui
+	//std::set<ShaderId> disabled_shaders = {};
+	std::set<ShaderId> disabled_shaders = { ShaderId::ForwardDebugCoreLight,
+				  						    ShaderId::ForwardDebugCutOffLight
+	                                        };
+
 	for (const auto& shader_couple : this->shaders) {
 		ShaderBatch* b = shader_couple.second;
-		b->render(this->state.camera);
+		if (disabled_shaders.count(b->getId()) == 0) {
+			b->render(this->state.camera);
+		}
 	}
 	//this->shaders[ShaderId::ForwardBasicFrag]->render(this->state.camera);
 }
@@ -58,9 +69,10 @@ void ForwardPipeline::addObject(nTiled_world::Object& object) {
 	// ------------------------------------------------------------------------
 	if (this->shaders.count(object.shader_id) == 0) {
 		// FIXME Rework this together with shaderfactor
+		ShaderFactory shader_factory = ShaderFactory(this->state);
 		this->shaders.insert(std::pair<ShaderId, ShaderBatch*>(
 			object.shader_id,
-			this->state.shader_factory.getShader(object.shader_id)));
+			shader_factory.getShader(object.shader_id, this->state)));
 	}
 
 	// Add object to shader

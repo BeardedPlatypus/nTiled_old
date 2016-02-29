@@ -28,18 +28,18 @@ layout (std140) uniform LightBlock {
 
 // Tiled Shading structures
 // ----------------------------------------------------------------------------
-layout(std430, binding = 0) buffer LightGridBuffer {
+layout (std430, binding = 0) buffer LightGridBuffer {
 	uvec2 tiles[];
-}
+};
 
-layout(std430, binding = 1) buffer LightIndexBuffer {
+layout (std430, binding = 1) buffer LightIndexBuffer {
 	uint light_indices[];
-}
+};
 
 // Position definition
 // ----------------------------------------------------------------------------
-uniform vec2 tileSize;
-uniform int n_tiles_x;
+uniform uvec2 tileSize;
+uniform uint n_tiles_x;
 
 // ----------------------------------------------------------------------------
 //  Main
@@ -49,29 +49,26 @@ void main() {
    
     // determine light tile
     vec2 position = gl_FragCoord.xy - vec2(0.5, 0.5);  
-    int tile_index = floor(position.x / tileSize.x) + 
-                     n_tiles_x * floor(position.y / tileSize.y);
+    int tile_index = int(floor(position.x / tileSize.x) + 
+                         n_tiles_x * floor(position.y / tileSize.y));
  
-    int offset = tiles[tile_index].x;
-    int n_light = tiles[tile_index].y;
+    uint offset = tiles[tile_index].x;
+    uint n_lights = tiles[tile_index].y;
 
     vec3 lightAcc = vec3(0.0f, 0.0f, 0.0f);
-    for (int i = offset; i < offset + n_lights; i++) {
+    for (uint i = offset; i < offset + n_lights; i++) {
+        // Look up the specific light
         Light light = lights[light_indices[i]];
+
         vec3 L = vec3(light.positionModelSpace - modelSpacePosition);
         float d = length(L);
         
-        if (d > radius) {
+        if (d < light.radius) {
             vec3 lightDir = L / d;
 			
 			// Distance attenuation 
-			float attenuation = 1 / (d * d);
-
-            // Scale and bias attenuation:
-            // attenuation = 0 at radius
-            // attenuation = 1 a t d=0
-			attenuation = (attenuation - light.radius) / (1.0f - light.radius);
-            attenuation = max(attenuation, 0);
+			float attenuation = clamp(1.0 - (d * d) / (light.radius * light.radius), 0.0, 1.0);
+			attenuation *= attenuation;
 
             // cos Angle Incidence
             float cosAngIncidence = dot(normalizedNormal, lightDir);
@@ -80,5 +77,5 @@ void main() {
 			lightAcc += light.intensity * cosAngIncidence * attenuation;
 		}
     }
-    fragmentColor = vec4((vec3(0.1f, 0.1f, 0.1f) + (lightAcc * 0.9)), 1.0);
+    fragmentColor = vec4((vec3(0.2f, 0.2f, 0.2f) + (lightAcc * 0.8)), 1.0);
 }

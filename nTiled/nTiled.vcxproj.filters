@@ -87,9 +87,6 @@
     <ClCompile Include="src\pipeline\shaders\ShaderFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pipeline\shaders\forward-shading\debug\DebugLightShaders.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\pipeline\shaders\forward-shading\BasicForwardLightShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -115,6 +112,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\pipeline\shaders\deferred-shading\GBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\forward-shading\debug-shaders\DebugLightShaders.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\ForwardDebugPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\debug-display\ConstantQuadWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\debug-display\LightProjectorQuadWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\debug-display\LightTilesDisplay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\light-management\Tiled\LightGrid..cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\light-management\Tiled\LightProjector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\light-management\Tiled\TiledLightManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -167,9 +188,6 @@
     <ClInclude Include="include\pipeline\shaders\deferred-shading\GBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\pipeline\shaders\forward-shading\debug\DebugLightShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\pipeline\shaders\forward-shading\BasicForwardLightShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -191,6 +209,30 @@
     <ClInclude Include="include\pipeline\shaders\deferred-shading\BasicDeferredLightShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\pipeline\shaders\forward-shading\debug-shaders\DebugLightShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\debug-display\DebugShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\debug-display\ConstantQuadWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\debug-display\LightProjectorQuadWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\debug-display\LightTilesDisplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\light-management\Tiled\LightGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\light-management\Tiled\LightProjector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\light-management\Tiled\TiledManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
@@ -206,5 +248,9 @@
     <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSGeometryPass.vert" />
     <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSLightPass.frag" />
     <None Include="src\pipeline\shaders-glsl\deferred-shading\basic\DSLightPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\debug-shaders\grid\grid.frag" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\debug-shaders\grid\grid.vert" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\debug-shaders\tile\tile.frag" />
+    <None Include="src\pipeline\shaders-glsl\forward-shading\debug-shaders\tile\tile.vert" />
   </ItemGroup>
 </Project>

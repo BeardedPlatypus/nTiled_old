@@ -2,13 +2,18 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 #include "camera\Camera.h"
 #include "world\World.h"
-#include "pipeline\shaders\ShaderFactory.h"
-#include "pipeline\PipelineType.h"
 #include "world\Lights.h"
 #include "world\LightConstructor.h"
+
+#include "pipeline\PipelineType.h"
+
+#include "pipeline\shaders\Shader.h"
+#include "pipeline\shaders\ShaderDefinitions.h"
+
 
 namespace nTiled_state {
 	class State {
@@ -29,10 +34,9 @@ namespace nTiled_state {
 		// World
 		nTiled_world::World world;
 		// Shaders
-		nTiled_pipeline::ShaderFactory shader_factory;
+		std::map<nTiled_pipeline::ShaderId, nTiled_pipeline::ShaderBatch*> shader_catalog;
 		// Pipeline type
 		nTiled_pipeline::PipelineType pipeline_type;
-
 	};
 
 

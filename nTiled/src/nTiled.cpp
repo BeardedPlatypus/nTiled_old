@@ -17,7 +17,8 @@
 #include "pipeline\shaders\deferred-shading\BasicDeferredLightShader.h"
 
 // TODO change this to parameter
-#define SCENE_PATH "C:/Users/Monthy/Documents/projects/thesis/scenes/scene-definitions/light_test2/scene.json"
+//#define SCENE_PATH "C:/Users/Monthy/Documents/projects/thesis/scenes/scene-definitions/light_test2/scene.json"
+#define SCENE_PATH "C:/Users/Monthy/Documents/projects/thesis/scenes/scene-definitions/tiled_test1/scene.json"
 //#define SCENE_PATH "C:/Users/Monthy/Documents/projects/thesis/scenes/scene-definitions/solid_test3/scene.json"
 
 // Function prototypes

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glad\glad.h>
 #include <glm\glm.hpp>
 #include <vector>
 
@@ -49,10 +50,10 @@ namespace nTiled_pipeline {
 		//TODO figure out whether it is necessary to give this 
 		// a more specific access function or not
 		glm::uvec2* grid;
-		std::vector<int> light_index_list;
+		std::vector<GLuint> light_index_list;
 
 	private:
-		std::vector<int>* light_index_list_raw;
+		std::vector<GLuint>* light_index_list_raw;
 		int total_light_indices;
 	};
 }

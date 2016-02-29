@@ -1,6 +1,8 @@
 #pragma once
 
 #include "pipeline\shaders\Shader.h"
+#include "pipeline\light-management\Tiled\TiledManager.h"
+#include "state\State.h"
 
 namespace nTiled_pipeline {
 	// ---------------------------------------------------------------------------
@@ -75,12 +77,22 @@ namespace nTiled_pipeline {
 	// ---------------------------------------------------------------------------
 	// Forward rendering: Tiled Lighting
 	// ---------------------------------------------------------------------------
-	/*
 	class ForwardTiledLightShader : public BasicForwardLightShader {
-		ForwardTiledLightShader();
+	public:
+		ForwardTiledLightShader(ShaderId shader_id, 
+			                    std::string path_vertex_shader,
+			                    std::string path_fragment_shader,
+			                    glm::uvec2 tile_size,
+			                    nTiled_state::State& state);
 
+		void init(Camera& camera);
 		void render(Camera& camera);
 		void loadShaders();
+	private:
+		BoxProjector projector;
+		TiledLightManager light_manager;
+
+		GLuint light_grid_buffer;
+		GLuint light_index_buffer;
 	};
-	*/
 }

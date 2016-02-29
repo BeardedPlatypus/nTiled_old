@@ -18,7 +18,9 @@
 
 // TODO add graceful error handling
 using namespace nTiled_state;
-State::State(std::string path): shader_factory(nTiled_pipeline::ShaderFactory()) {
+State::State(std::string path): 
+	shader_catalog(std::map<nTiled_pipeline::ShaderId, 
+		                    nTiled_pipeline::ShaderBatch*>()) {
 	// Read file to string
 #ifdef DEBUG
 	std::cout << "JSON - reading scene" << std::endl;
@@ -171,5 +173,12 @@ State::State(std::string path): shader_factory(nTiled_pipeline::ShaderFactory())
 }
 
 State::~State() {
+	// Delete camera control
 	delete this->camera_control;
+
+	// Delete stored shaders
+	for (const auto& shader_pair : this->shader_catalog) {
+		nTiled_pipeline::ShaderBatch* s = shader_pair.second;
+		delete s;
+	}
 }

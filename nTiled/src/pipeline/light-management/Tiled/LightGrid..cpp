@@ -16,7 +16,7 @@ LightGrid::LightGrid(int total_width, int total_height,
        	             int tile_width, int tile_height) :
 	total_width(total_width), total_height(total_height),
 	tile_width(tile_width), tile_height(tile_height),
-	light_index_list(std::vector<int>()) {
+	light_index_list(std::vector<GLuint>()) {
 	// calc number tiles x
 	this->n_x = total_width / tile_width;
 	if (tile_width * n_x < total_width) {
@@ -31,7 +31,7 @@ LightGrid::LightGrid(int total_width, int total_height,
 	this->n_tiles = n_x * n_y;
 	// allocate memory for the tiles
 	this->grid = new glm::uvec2[this->n_tiles];
-	this->light_index_list_raw = new std::vector<int>[this->n_tiles];
+	this->light_index_list_raw = new std::vector<GLuint>[this->n_tiles];
 
 	this->clearGrid();
 }
@@ -48,7 +48,7 @@ LightGrid::~LightGrid() {
 void LightGrid::clearGrid() {
 	for (int i = 0; i < n_tiles; i++) {
 		this->grid[i] = glm::uvec2(0, 0);
-		this->light_index_list_raw[i] = std::vector<int>();
+		this->light_index_list_raw[i] = std::vector<GLuint>();
 	}
 	this->total_light_indices = 0;
 }
@@ -60,7 +60,7 @@ void LightGrid::incrementTiles(glm::uvec4 tiles, int light_index) {
 	unsigned int end_pos = this->n_x * (tiles.w) + tiles.z;
 
 	// calculate total number of indices added
-	this->total_light_indices += ((tiles.z - tiles.x) * (tiles.w - tiles.y));
+	this->total_light_indices += ((tiles.z - tiles.x + 1) * (tiles.w - tiles.y + 1));
 	
 	while (cursor <= end_pos) {
 		// add index to internal light list
@@ -75,14 +75,15 @@ void LightGrid::incrementTiles(glm::uvec4 tiles, int light_index) {
 }
 
 void LightGrid::finaliseGrid() {
-	this->light_index_list = std::vector<int>(this->total_light_indices);
+	//this->light_index_list = std::vector<GLuint>(this->total_light_indices);
+	this->light_index_list = std::vector<GLuint>();
 
 	unsigned int current_offset = 0;
 	unsigned int n_indices;
 
 	for (int i = 0; i < this->n_tiles; i++) {
 		// add elements to light index list
-		for (int light_index : this->light_index_list_raw[i]) {
+		for (GLuint light_index : this->light_index_list_raw[i]) {
 			light_index_list.push_back(light_index);
 		}
 		// set values in light grid

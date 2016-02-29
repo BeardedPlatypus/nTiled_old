@@ -1,6 +1,7 @@
 #include "pipeline\shaders\ShaderFactory.h"
+
 #include "pipeline\shaders\forward-shading\BasicForwardLightShader.h"
-#include "pipeline\shaders\forward-shading\debug\DebugLightShader.h"
+#include "pipeline\shaders\forward-shading\debug-shaders\DebugLightShader.h"
 
 #include <iostream>
 
@@ -9,19 +10,18 @@ using namespace nTiled_pipeline;
 // ----------------------------------------------------------------------------
 //  Constructor || Destructor
 // ----------------------------------------------------------------------------
-ShaderFactory::ShaderFactory() : shader_catalog(std::map<ShaderId, ShaderBatch*>()) {}
+ShaderFactory::ShaderFactory(nTiled_state::State& state) :
+	ShaderFactory(state.shader_catalog) {}
 
-ShaderFactory::~ShaderFactory() {
-	for (const auto& shader_pair : this->shader_catalog) {
-		ShaderBatch* s = shader_pair.second;
-		delete s;
-	}
-}
+ShaderFactory::ShaderFactory(std::map<ShaderId, ShaderBatch*>& shader_catalog) : 
+	shader_catalog(shader_catalog) {}
+
+ShaderFactory::~ShaderFactory() {}
 
 // ----------------------------------------------------------------------------
 //  getShader
 // ----------------------------------------------------------------------------
-ShaderBatch* ShaderFactory::getShader(ShaderId shader_id) {
+ShaderBatch* ShaderFactory::getShader(ShaderId shader_id, nTiled_state::State& state) {
 	std::map<ShaderId, ShaderBatch*>::iterator it = 
 		this->shader_catalog.find(shader_id);
 
@@ -30,7 +30,7 @@ ShaderBatch* ShaderFactory::getShader(ShaderId shader_id) {
 		return it->second;
 	} // shader is not yet constructed, and thus added
 	else {
-		ShaderBatch* shader_p = addShader(shader_id);
+		ShaderBatch* shader_p = addShader(shader_id, state);
 		return shader_p;
 	}
 }
@@ -39,7 +39,7 @@ ShaderBatch* ShaderFactory::getShader(ShaderId shader_id) {
 // ----------------------------------------------------------------------------
 //  addShader
 // ----------------------------------------------------------------------------
-ShaderBatch* ShaderFactory::addShader(ShaderId shader_id) {
+ShaderBatch* ShaderFactory::addShader(ShaderId shader_id, nTiled_state::State& state) {
 	ShaderBatch* p;
 
 	// Regular Forward Shaders
@@ -95,6 +95,21 @@ ShaderBatch* ShaderFactory::addShader(ShaderId shader_id) {
 			path_vert_shader,
 			path_frag_shader);
 	}
+	else if (shader_id == ShaderId::ForwardTiled) {
+		// Shader locations
+		std::string path_vert_shader =
+			"./src/pipeline/shaders-glsl/forward-shading/forward-tiled/forward-tiled.vert";
+		std::string path_frag_shader =
+			"./src/pipeline/shaders-glsl/forward-shading/forward-tiled/forward-tiled.frag";
+
+		// Allocate new shader batch on the stack
+		p = new ForwardTiledLightShader(
+			ShaderId::ForwardTiled,
+			path_vert_shader,
+			path_frag_shader,
+			glm::uvec2(1200, 1200),  // FIXME remove hard codedness of this
+			state);
+	}
 	// Tiled Forward Shaders
 	// ------------------------------------------------------------------------
 
@@ -106,9 +121,9 @@ ShaderBatch* ShaderFactory::addShader(ShaderId shader_id) {
 	else if (shader_id == ShaderId::ForwardDebugCoreLight) {
 		// Shader locations
 		std::string path_vert_shader =
-			"./src/pipeline/shaders-glsl/forward-shading/debug/core/core.vert";
+			"./src/pipeline/shaders-glsl/forward-shading/debug-shaders/core/core.vert";
 		std::string path_frag_shader =
-			"./src/pipeline/shaders-glsl/forward-shading/debug/core/core.frag";
+			"./src/pipeline/shaders-glsl/forward-shading/debug-shaders/core/core.frag";
 
 		// Allocate new shader batch on the stack
 		p = new ForwardDebugCoreLight(
@@ -119,9 +134,9 @@ ShaderBatch* ShaderFactory::addShader(ShaderId shader_id) {
 	else if (shader_id == ShaderId::ForwardDebugCutOffLight) {
 		// Shader locations
 		std::string path_vert_shader =
-			"./src/pipeline/shaders-glsl/forward-shading/debug/cutoff/cutoff.vert";
+			"./src/pipeline/shaders-glsl/forward-shading/debug-shaders/cutoff/cutoff.vert";
 		std::string path_frag_shader =
-			"./src/pipeline/shaders-glsl/forward-shading/debug/cutoff/cutoff.frag";
+			"./src/pipeline/shaders-glsl/forward-shading/debug-shaders/cutoff/cutoff.frag";
 
 		// Allocate new shader batch on the stack
 		p = new ForwardDebugCutOffLight(

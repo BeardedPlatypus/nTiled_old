@@ -11,6 +11,7 @@ namespace nTiled_pipeline {
 		ForwardBasicVertex,
 		ForwardBasicFrag,
 		ForwardAttenuated,
+		ForwardTiled,
 		
 		// Tiled Forward Shaders
 		// --------------------------------------------------------------------

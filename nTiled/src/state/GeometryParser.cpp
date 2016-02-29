@@ -80,7 +80,8 @@ void nTiled_state::parseGeometry(std::string path,
 		{ "forward_basic_frag", ShaderId::ForwardBasicFrag },
 		{ "forward_attenuated", ShaderId::ForwardAttenuated },
 		{ "forward_debug_core_light", ShaderId::ForwardDebugCoreLight },
-		{ "forward_debug_cutoff_light", ShaderId::ForwardDebugCutOffLight }
+		{ "forward_debug_cutoff_light", ShaderId::ForwardDebugCutOffLight },
+		{ "forward_tiled", ShaderId::ForwardTiled }
 	};
 
 	std::map<std::string, AssImpConstructor> obj_constructor_catalog =

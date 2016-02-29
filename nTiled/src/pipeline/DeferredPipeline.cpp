@@ -4,6 +4,8 @@
 #include "pipeline\PipelineObject.h"
 #include "pipeline\shader-util\LoadShaders.h"
 
+#include "pipeline\shaders\ShaderFactory.h"
+
 #include <iostream>
 
 using namespace nTiled_pipeline;
@@ -15,7 +17,8 @@ using namespace nTiled_pipeline;
 DeferredPipeline::DeferredPipeline(nTiled_state::State& state,
 	                               ShaderId shader_id) :
 	                               Pipeline(state) {
-	this->deferredShader = this->state.shader_factory.getShader(shader_id);
+	ShaderFactory shader_factory = ShaderFactory(state);
+	this->deferredShader = shader_factory.getShader(shader_id, state);
 
 
 	for (nTiled_world::Object object : this->state.world.objects) {
