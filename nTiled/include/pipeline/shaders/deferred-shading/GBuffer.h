@@ -1,36 +1,43 @@
 #pragma once
 
+// ----------------------------------------------------------------------------
+//  Libraries
+// ----------------------------------------------------------------------------
 #include <glad\glad.h>
 
-namespace nTiled_pipeline {
-	class GBuffer {
-	public:
-		enum GBUFFER_TEXTURE_TYPE {
-			GBUFFER_TEXTURE_TYPE_DIFFUSE,
-			GBUFFER_TEXTURE_TYPE_NORMAL,
-			GBUFFER_NUM_TEXTURES
-		};
+namespace nTiled {
+namespace pipeline {
 
-		// Constructor | Destructor
-		GBuffer(unsigned int width, unsigned int height);
+class GBuffer {
+ public:
+  enum GBUFFER_TEXTURE_TYPE {
+    GBUFFER_TEXTURE_TYPE_DIFFUSE,
+    GBUFFER_TEXTURE_TYPE_NORMAL,
+    GBUFFER_NUM_TEXTURES
+  };
 
-		// Render related functions
-		void init();
+  // Constructor | Destructor
+  GBuffer(unsigned int width, unsigned int height);
 
-		void bindForWriting();
-		void unbindForWriting();
+  // Render related functions
+  void init();
 
-		void bindForReading();
-		void setReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
+  void bindForWriting();
+  void unbindForWriting();
 
-		GLuint getPointerFBO();
+  void bindForReading();
+  void setReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
 
-	private:
-		unsigned int width;
-		unsigned int height;
+  GLuint getPointerFBO();
 
-		GLuint p_fbo;
-		GLuint p_textures[GBUFFER_NUM_TEXTURES];
-		GLuint p_depth_texture;
-	};
-}
+private:
+  unsigned int width;
+  unsigned int height;
+
+  GLuint p_fbo;
+  GLuint p_textures[GBUFFER_NUM_TEXTURES];
+  GLuint p_depth_texture;
+};
+
+} // pipeline
+} // nTiled

@@ -1,31 +1,42 @@
 #pragma once
 
-#include "pipeline\debug-display\DebugShader.h"
-#include "pipeline\PipelineObject.h"
-
+// ----------------------------------------------------------------------------
+//  Libraries
+// ----------------------------------------------------------------------------
 #include <vector>
 #include <glm\glm.hpp>
 
-#include "pipeline\light-management\Tiled\TiledManager.h"
+// ----------------------------------------------------------------------------
+//  nTiled headers
+// ----------------------------------------------------------------------------
+#include "pipeline\debug-display\DebugShader.h"
+#include "pipeline\PipelineObject.h"
 
-namespace nTiled_pipeline {
-	class LightTilesDisplay: public DebugShader {
-	public:
-		LightTilesDisplay(TiledLightManager& manager);
-		void render();
+#include "pipeline\light-management\Tiled\TiledLightManager.h"
 
-	private:
-		std::vector<PipelineObject> quads;
 
-		GLuint tile_shader_program;
-		GLuint grid_shader_program;
+namespace nTiled {
+namespace pipeline {
 
-		void drawGrid();
-		void drawTiles();
+class LightTilesDisplay : public DebugShader {
+public:
+  LightTilesDisplay(TiledLightManager& manager);
+  void render();
 
-		TiledLightManager& light_manager;
-		
-		std::vector<PipelineObject> tiles;
-		PipelineObject grid;
-	};
-}
+private:
+  std::vector<PipelineObject> quads;
+
+  GLuint tile_shader_program;
+  GLuint grid_shader_program;
+
+  void drawGrid();
+  void drawTiles();
+
+  TiledLightManager& light_manager;
+
+  std::vector<PipelineObject> tiles;
+  PipelineObject grid;
+};
+
+} // pipeline
+} // nTiled

@@ -1,37 +1,44 @@
 #pragma once
 
+// ----------------------------------------------------------------------------
+//  nTiled headers
+// ----------------------------------------------------------------------------
 #include "world\World.h"
 #include "world\ObjectConstructors.h"
 
-namespace nTiled_world {
-	// ------------------------------------------------------------------------
-	//  Abstract class
-	class LightConstructor {
-	public:
-		virtual ~LightConstructor() {}
-		virtual void add(std::string name,
-			             glm::vec3 intensity, 
-			             float cutoff_radius,
-			             bool is_emitting,
-			             glm::mat4 transformationMatrix) = 0;
-	};
+namespace nTiled {
+namespace world {
 
-	// ------------------------------------------------------------------------
-	//  Point lights
-	class PointLightConstructor : public LightConstructor {
-	public:
-		PointLightConstructor(World& world);
-		void add(std::string name,
-			     glm::vec3 intensity,
-			     float cutoff_radius,
-			     bool is_emitting,
-			     glm::mat4 transformationMatrix);
+// ------------------------------------------------------------------------
+//  Abstract class
+class LightConstructor {
+ public:
+  virtual ~LightConstructor() {}
+  virtual void add(const std::string& name,
+                   glm::vec3 intensity,
+                   float cutoff_radius,
+                   bool is_emitting,
+                   glm::mat4 transformationMatrix) = 0;
+};
 
-	private:
-		World& world;
+// ------------------------------------------------------------------------
+//  Point lights
+class PointLightConstructor : public LightConstructor {
+ public:
+  PointLightConstructor(World& world);
+  void add(const std::string& name,
+           glm::vec3 intensity,
+           float cutoff_radius,
+           bool is_emitting,
+           glm::mat4 transformationMatrix);
 
-		// Object constructors
-		AssImpConstructor core_constructor;
-		AssImpConstructor cutoff_constructor;
-	};
+ private:
+  World& world;
+
+  // Object constructors
+  AssImpConstructor core_constructor;
+  AssImpConstructor cutoff_constructor;
+};
+
+}
 }

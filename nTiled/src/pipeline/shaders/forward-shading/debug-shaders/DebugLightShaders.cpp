@@ -1,169 +1,184 @@
-#include "pipeline\shaders\forward-shading\debug-shaders\DebugLightShader.h"
+#include "pipeline\shaders\forward-shading\debug-shaders\ForwardDebugLightShader.h"
 
+// ----------------------------------------------------------------------------
+//  Libraries
+// ----------------------------------------------------------------------------
 #include <glm/gtc/type_ptr.hpp>
 
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
+// ----------------------------------------------------------------------------
+//  nTiled headers
+// ----------------------------------------------------------------------------
 #include "pipeline\shader-util\LoadShaders.h"
 #include "camera\Camera.h"
-using namespace nTiled_pipeline;
+namespace nTiled {
+namespace pipeline {
 
-ForwardDebugLight::ForwardDebugLight(ShaderId shader_id,
- 	                                 std::string vertex_shader_path,
-	                                 std::string fragment_shader_path) : 
-	BasicForwardFragLightShader(shader_id,
-		                        vertex_shader_path,
-		                        fragment_shader_path) {}
+ForwardDebugLight::ForwardDebugLight(ForwardShaderId shader_id,
+                                     const std::string& vertex_shader_path,
+                                     const std::string& fragment_shader_path) :
+  ForwardFragLightingShader(shader_id,
+                            vertex_shader_path,
+                            fragment_shader_path) {
+}
 
 void ForwardDebugLight::loadShaders() {
-	// Vertex Shader
-	// -----------------------------------------------------------------
-	std::stringstream vertexShaderBuffer =
-		readShader(this->path_vertex_shader);
-	GLuint vertexShader = compileShader(GL_VERTEX_SHADER,
-		vertexShaderBuffer.str());
+  // Vertex Shader
+  // -----------------------------------------------------------------
+  std::stringstream vertexShaderBuffer =
+    readShader(this->path_vertex_shader);
+  GLuint vertexShader = compileShader(GL_VERTEX_SHADER,
+                                      vertexShaderBuffer.str());
 
-	// Fragment Shader
-	// -----------------------------------------------------------------
-	std::stringstream fragmentShaderBuffer = 
-		readShader(this->path_fragment_shader);
+  // Fragment Shader
+  // -----------------------------------------------------------------
+  std::stringstream fragmentShaderBuffer =
+    readShader(this->path_fragment_shader);
 
-	GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER,
-		                                  fragmentShaderBuffer.str());
-	this->shader_program = createProgram(vertexShader, fragmentShader);
+  GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER,
+                                        fragmentShaderBuffer.str());
+  this->shader_program = createProgram(vertexShader, fragmentShader);
 
 
 }
 // ----------------------------------------------------------------------------
 //  ForwardDebugCore shader
 // ----------------------------------------------------------------------------
-ForwardDebugCoreLight::ForwardDebugCoreLight(ShaderId shader_id,
- 	                                     std::string vertex_shader_path,
-	                                     std::string fragment_shader_path) : 
-	ForwardDebugLight(shader_id,
-		              vertex_shader_path,
-		              fragment_shader_path) {}
-
-void ForwardDebugCoreLight::init(Camera& camera) {
-	// Create shader program
-	// ------------------------------------------------------------------------
-	std::cout << "initing debug core light" << std::endl;
-
-	this->loadShaders();
-
-	// Setup perspective matrix
-	// ------------------------------------------------------------------------
-	glm::mat4 perspective_matrix = camera.getPerspectiveMatrix();
-	GLint p_cameraToClip = glGetUniformLocation(this->shader_program,
-		                                        "cameraToClipMatrix");
-
-	glUseProgram(this->shader_program);
-	glUniformMatrix4fv(p_cameraToClip, 
-		               1, GL_FALSE, 
-		               glm::value_ptr(perspective_matrix));
-	glUseProgram(0);
+ForwardDebugCoreLight::ForwardDebugCoreLight(
+    ForwardShaderId shader_id,
+    const std::string& vertex_shader_path,
+    const std::string& fragment_shader_path) :
+  ForwardDebugLight(shader_id,
+                    vertex_shader_path,
+                    fragment_shader_path) {
 }
 
-void ForwardDebugCoreLight::render(Camera& camera) {
-	// Set shader program to this
-	glUseProgram(this->shader_program);
+void ForwardDebugCoreLight::init(const camera::Camera& camera) {
+  // Create shader program
+  // ------------------------------------------------------------------------
+  std::cout << "initing debug core light" << std::endl;
 
-	std::cout << "ping" << std::endl;
+  this->loadShaders();
 
-	// Set camera matrix
-	glm::mat4 lookAt = camera.getLookAt();
+  // Setup perspective matrix
+  // ------------------------------------------------------------------------
+  glm::mat4 perspective_matrix = camera.getPerspectiveMatrix();
+  GLint p_cameraToClip = glGetUniformLocation(this->shader_program,
+                                              "cameraToClipMatrix");
 
-	// Render models
-	for (PipelineObject obj : this->objects) {
-		// Bind vertex array object of this model
-		glBindVertexArray(obj.vao);
+  glUseProgram(this->shader_program);
+  glUniformMatrix4fv(p_cameraToClip,
+                     1, GL_FALSE,
+                     glm::value_ptr(perspective_matrix));
+  glUseProgram(0);
+}
 
-		// Set camera position
-		GLint p_modelToCamera = glGetUniformLocation(
-			this->shader_program,
-			"modelToCameraMatrix");
+void ForwardDebugCoreLight::render(const camera::Camera& camera) {
+  // Set shader program to this
+  glUseProgram(this->shader_program);
 
-		glm::mat4 modelToCamera = lookAt * obj.transformation;
+  std::cout << "ping" << std::endl;
 
-		glUniformMatrix4fv(p_modelToCamera, 
-			               1, 
-			               GL_FALSE,
-			               glm::value_ptr(modelToCamera));
+  // Set camera matrix
+  glm::mat4 lookAt = camera.getLookAt();
 
-		// render the elements
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,
-			obj.element_buffer);
-		glDrawElements(GL_TRIANGLES,
-			obj.element_buffer_size,
-			GL_UNSIGNED_INT, 0);
-	}
-	glBindVertexArray(0);
-	glUseProgram(0);
+  // Render models
+  for (PipelineObject obj : this->objects) {
+    // Bind vertex array object of this model
+    glBindVertexArray(obj.vao);
+
+    // Set camera position
+    GLint p_modelToCamera = glGetUniformLocation(
+      this->shader_program,
+      "modelToCameraMatrix");
+
+    glm::mat4 modelToCamera = lookAt * obj.transformation;
+
+    glUniformMatrix4fv(p_modelToCamera,
+                       1,
+                       GL_FALSE,
+                       glm::value_ptr(modelToCamera));
+
+    // render the elements
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,
+                 obj.element_buffer);
+    glDrawElements(GL_TRIANGLES,
+                   obj.element_buffer_size,
+                   GL_UNSIGNED_INT, 0);
+  }
+  glBindVertexArray(0);
+  glUseProgram(0);
 }
 
 
 // ----------------------------------------------------------------------------
 //  ForwardDebugCutoff shader
 // ----------------------------------------------------------------------------
-ForwardDebugCutOffLight::ForwardDebugCutOffLight(ShaderId shader_id,
- 	                                     std::string vertex_shader_path,
-	                                     std::string fragment_shader_path) : 
-	ForwardDebugLight(shader_id,
-		              vertex_shader_path,
-		              fragment_shader_path) {}
-void ForwardDebugCutOffLight::init(Camera& camera) {
-	// Create shader program
-	// ------------------------------------------------------------------------
-	this->loadShaders();
-	std::cout << "initing debug cutoff light" << std::endl;
+ForwardDebugCutOffLight::ForwardDebugCutOffLight(
+    ForwardShaderId shader_id,
+    const std::string& vertex_shader_path,
+    const std::string& fragment_shader_path) :
+  ForwardDebugLight(shader_id,
+                    vertex_shader_path,
+                    fragment_shader_path) {
+}
+void ForwardDebugCutOffLight::init(const camera::Camera& camera) {
+  // Create shader program
+  // ------------------------------------------------------------------------
+  this->loadShaders();
+  std::cout << "initing debug cutoff light" << std::endl;
 
-	// Setup perspective matrix
-	// ------------------------------------------------------------------------
-	glm::mat4 perspective_matrix = camera.getPerspectiveMatrix();
-	GLint p_cameraToClip = glGetUniformLocation(this->shader_program,
-		                                        "cameraToClipMatrix");
+  // Setup perspective matrix
+  // ------------------------------------------------------------------------
+  glm::mat4 perspective_matrix = camera.getPerspectiveMatrix();
+  GLint p_cameraToClip = glGetUniformLocation(this->shader_program,
+                                              "cameraToClipMatrix");
 
-	glUseProgram(this->shader_program);
-	glUniformMatrix4fv(p_cameraToClip, 
-		               1, GL_FALSE, 
-		               glm::value_ptr(perspective_matrix));
-	glUseProgram(0);
+  glUseProgram(this->shader_program);
+  glUniformMatrix4fv(p_cameraToClip,
+                     1, GL_FALSE,
+                     glm::value_ptr(perspective_matrix));
+  glUseProgram(0);
 }
 
 
-void ForwardDebugCutOffLight::render(Camera& camera) {
-	// Set shader program to this
-	glUseProgram(this->shader_program);
+void ForwardDebugCutOffLight::render(const camera::Camera& camera) {
+  // Set shader program to this
+  glUseProgram(this->shader_program);
 
-	// Set camera matrix
-	glm::mat4 lookAt = camera.getLookAt();
+  // Set camera matrix
+  glm::mat4 lookAt = camera.getLookAt();
 
-	// Render models
-	for (PipelineObject obj : this->objects) {
-		// Bind vertex array object of this model
-		glBindVertexArray(obj.vao);
+  // Render models
+  for (PipelineObject obj : this->objects) {
+    // Bind vertex array object of this model
+    glBindVertexArray(obj.vao);
 
-		// Set camera position
-		GLint p_modelToCamera = glGetUniformLocation(
-			this->shader_program,
-			"modelToCameraMatrix");
+    // Set camera position
+    GLint p_modelToCamera = glGetUniformLocation(
+      this->shader_program,
+      "modelToCameraMatrix");
 
-		glm::mat4 modelToCamera = lookAt * obj.transformation;
+    glm::mat4 modelToCamera = lookAt * obj.transformation;
 
-		glUniformMatrix4fv(p_modelToCamera, 
-			               1, 
-			               GL_FALSE,
-			               glm::value_ptr(modelToCamera));
+    glUniformMatrix4fv(p_modelToCamera,
+                       1,
+                       GL_FALSE,
+                       glm::value_ptr(modelToCamera));
 
-		// render the elements
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,
-			obj.element_buffer);
-		glDrawElements(GL_TRIANGLES,
-			obj.element_buffer_size,
-			GL_UNSIGNED_INT, 0);
-	}
-	glBindVertexArray(0);
-	glUseProgram(0);
+    // render the elements
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,
+                 obj.element_buffer);
+    glDrawElements(GL_TRIANGLES,
+                   obj.element_buffer_size,
+                   GL_UNSIGNED_INT, 0);
+  }
+  glBindVertexArray(0);
+  glUseProgram(0);
 }
+
+} // pipeline
+} // namespace

@@ -1,5 +1,8 @@
 #include "state\State.h"
 
+// ----------------------------------------------------------------------------
+//  Libraries
+// ----------------------------------------------------------------------------
 // File handling
 #include <fstream>
 #include <string>
@@ -17,8 +20,8 @@
 #include <iostream>
 #endif // DEBUG
 
-void nTiled_state::parseLights(std::string path,
-                               nTiled_world::LightConstructor& constructor) {
+void nTiled::state::parseLights(const std::string& path,
+                               nTiled::world::LightConstructor& constructor) {
 #ifdef DEBUG
 	std::cout << "      file: " << path << std::endl;
 	std::cout << "          loading ... ";

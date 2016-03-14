@@ -1,50 +1,47 @@
 #pragma once
 
+// ----------------------------------------------------------------------------
+//  Libraries
+// ----------------------------------------------------------------------------
 #include <glm\glm.hpp>
 
+// ----------------------------------------------------------------------------
+//  nTiled headers
+// ----------------------------------------------------------------------------
 #include "camera\CameraControl.h"
 #include "camera\CameraData.h"
 
+namespace nTiled {
+namespace camera {
+
 class Camera {
-public:
-	/*
-	Camera(CameraControl& control, CameraData data);
+ public:
+  // Constructor
+  Camera(CameraControl* control,
+         glm::vec3 camera_eye,
+         glm::vec3 camera_center,
+         glm::vec3 camera_up,
+         float fovy,
+         float aspect,
+         float z_near,
+         float z_far);
+  Camera();
 
-	Camera(CameraControl& control, glm::vec3 camera_eye,
-								   glm::vec3 camera_center,
-								   glm::vec3 camera_up,
-								   glm::mat4 perspective_matrix);
-	Camera(CameraControl& control, glm::mat4 lookAt_matrix,
-								   float fovy,
-								   float aspect,
-								   float z_near,
-								   float z_far);
-	*/
-	// Constructor
-	Camera(CameraControl* control, 
-		   glm::vec3 camera_eye,
-		   glm::vec3 camera_center,
-		   glm::vec3 camera_up,
-		   float fovy,
-		   float aspect,
-		   float z_near,
-		   float z_far);
-	Camera();
-	// Destructor
-	//~Camera();
+  // Access Camera Data
+  glm::mat4 getLookAt() const;
+  glm::mat4 getPerspectiveMatrix() const;
+  glm::vec2 getDepthrange() const;
 
-	// Access Camera Data
-	glm::mat4 getLookAt();
-	glm::mat4 getPerspectiveMatrix();
-	glm::vec2 getDepthrange();
+  // Update Camera data based on the io and the set CameraControl
+  void update(const ImGuiIO& io);
+  void toFocus(const ImGuiIO& io);
 
-	// Update Camera data based on the io and the set CameraControl
-	void update(ImGuiIO& io);
-	void toFocus(ImGuiIO& io);
+ private:
+  CameraControl* control;
+  CameraData data;
 
-private:
-	CameraControl* control;
-	CameraData data;
-
-	bool is_active;
+  bool is_active;
 };
+
+} // camera
+} // nTiled

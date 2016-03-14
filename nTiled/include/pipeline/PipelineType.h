@@ -1,8 +1,13 @@
 #pragma once
 
-namespace nTiled_pipeline {
-	enum class PipelineType {
-		Forward,
-		Deferred
-	};
-}
+namespace nTiled {
+namespace pipeline {
+
+enum class PipelineType {
+  Forward,
+  ForwardDebug,
+  Deferred,
+};
+
+} // pipeline
+} // nTiled

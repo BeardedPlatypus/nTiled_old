@@ -66,10 +66,8 @@ float linearizeDepth(in vec2 uv) {
 void main() {
     // calculate position.
     // ------------------------------------------------------------------------
-  
     vec2 texCoords = calcTextureCoordinates();
     vec3 W = vec3(gl_FragCoord.xy, texture(depthTexture, texCoords).x);
-    //vec3 W = vec3(gl_FragCoord.xy, linearizeDepth(texCoords));
     
     vec4 fragmentCameraPosition = calcCameraPositionFromWindowPosition(W);
 
@@ -82,17 +80,24 @@ void main() {
         fragmentColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
     } 
     else {
-        float cosAngIncidence = 0.0;
+        vec3 lightAcc = vec3(0.0f, 0.0f, 0.0f);
         for (int i = 0; i < NUM_LIGHTS; i++) {
-            vec3 lightDir = normalize(vec3(lights[i].positionModelSpace - modelSpacePosition));
-            cosAngIncidence = dot(normalizedNormal, lightDir);
-            cosAngIncidence = clamp(cosAngIncidence, 0, 1);
+            vec3 L = vec3(lights[i].positionCameraSpace - fragmentCameraPosition);
+            float d = length(L);
+        
+            if (d < lights[i].radius) {
+                vec3 lightDir = L / d;
+			
+    			float attenuation = clamp(1.0 - (d * d) / (lights[i].radius * lights[i].radius), 0.0, 1.0);
+    			attenuation *= attenuation;
+
+                // cos Angle Incidence
+                float cosAngIncidence = dot(normalizedNormal, lightDir);
+                cosAngIncidence = clamp(cosAngIncidence, 0, 1);
+			
+			    lightAcc += lights[i].intensity * cosAngIncidence * attenuation;
+            }
         }
         fragmentColor = vec4(cosAngIncidence, cosAngIncidence, cosAngIncidence, 1.0);
     }
-    //fragmentColor = vec4(0.0f, 1.0f, 1.0f, 1.0f);
-    //fragmentColor = vec4(texture(depthTexture, texCoords).xyz, 1.0f);
-    //fragmentColor = vec4(texture(depthTexture, texCoords).x, texture(depthTexture, texCoords).x, texture(depthTexture, texCoords).x, 1.0f);
-    //float depth = linearizeDepth(texCoords);
-    //fragmentColor = vec4(depth, depth, depth, 1.0f);
 }

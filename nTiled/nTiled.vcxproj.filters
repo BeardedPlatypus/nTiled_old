@@ -87,9 +87,6 @@
     <ClCompile Include="src\pipeline\shaders\ShaderFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pipeline\shaders\forward-shading\BasicForwardLightShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\pipeline\shaders\forward-shading\TiledForwardShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -106,9 +103,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\pipeline\shaders\forward-shading\SolidShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\pipeline\shaders\deferred-shading\BasicDeferredLightShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\pipeline\shaders\deferred-shading\GBuffer.cpp">
@@ -136,6 +130,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\pipeline\light-management\Tiled\TiledLightManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\deferred-shading\TiledDeferredLightShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\forward-shading\ForwardShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\deferred-shading\DeferredShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pipeline\shaders\ShaderDefinitions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\state\StateView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\state\StateShading.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -179,16 +191,10 @@
     <ClInclude Include="include\world\Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\pipeline\shaders\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\pipeline\PipelineObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\pipeline\shaders\deferred-shading\GBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pipeline\shaders\forward-shading\BasicForwardLightShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\pipeline\shaders\ShaderFactory.h">
@@ -204,12 +210,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\pipeline\PipelineType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pipeline\shaders\deferred-shading\BasicDeferredLightShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\pipeline\shaders\forward-shading\debug-shaders\DebugLightShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\pipeline\debug-display\DebugShader.h">
@@ -230,7 +230,22 @@
     <ClInclude Include="include\pipeline\light-management\Tiled\LightProjector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\pipeline\light-management\Tiled\TiledManager.h">
+    <ClInclude Include="include\pipeline\shaders\forward-shading\ForwardShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\shaders\forward-shading\debug-shaders\ForwardDebugLightShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\shaders\deferred-shading\DeferredShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\state\StateView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\state\StateShading.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pipeline\light-management\Tiled\TiledLightManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -252,5 +267,13 @@
     <None Include="src\pipeline\shaders-glsl\forward-shading\debug-shaders\grid\grid.vert" />
     <None Include="src\pipeline\shaders-glsl\forward-shading\debug-shaders\tile\tile.frag" />
     <None Include="src\pipeline\shaders-glsl\forward-shading\debug-shaders\tile\tile.vert" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\deferred-attenuated\DSGeometryPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\deferred-attenuated\DSGeometryPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\deferred-attenuated\DSLightPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\deferred-attenuated\DSLightPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\deferred-tiled\DSGeometryPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\deferred-tiled\DSGeometryPass.vert" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\deferred-tiled\DSLightPass.frag" />
+    <None Include="src\pipeline\shaders-glsl\deferred-shading\deferred-tiled\DSLightPass.vert" />
   </ItemGroup>
 </Project>

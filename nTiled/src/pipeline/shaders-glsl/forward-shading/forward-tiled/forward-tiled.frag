@@ -77,5 +77,5 @@ void main() {
 			lightAcc += light.intensity * cosAngIncidence * attenuation;
 		}
     }
-    fragmentColor = vec4((vec3(0.2f, 0.2f, 0.2f) + (lightAcc * 0.8)), 1.0);
+    fragmentColor = vec4((vec3(0.1f, 0.1f, 0.1f) + (lightAcc * 0.9)), 1.0);
 }

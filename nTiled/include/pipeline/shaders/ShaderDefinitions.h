@@ -1,33 +1,72 @@
 #pragma once
 
-namespace nTiled_pipeline {
-	enum class ShaderId {
-		// ====================================================================
-		//  Forward
-		// ====================================================================
-		//  Regular Forward Shaders
-		// --------------------------------------------------------------------
-		ForwardSolid,
-		ForwardBasicVertex,
-		ForwardBasicFrag,
-		ForwardAttenuated,
-		ForwardTiled,
-		
-		// Tiled Forward Shaders
-		// --------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+//  Libraries
+// ----------------------------------------------------------------------------
+#include <string>
+
+// ----------------------------------------------------------------------------
+//  nTiled headers
+// ----------------------------------------------------------------------------
+#include "pipeline\PipelineType.h"
+
+namespace nTiled {
+namespace pipeline {
+
+/*!
+ * Enum specifying all the possible forward shaders
+ */
+enum class ForwardShaderId {
+  //  Regular Forward Shaders
+  // --------------------------------------------------------------------
+  ForwardSolid,
+  ForwardBasicVertex,
+  ForwardBasicFrag,
+  ForwardAttenuated,
+
+  // Tiled Forward Shaders
+  // --------------------------------------------------------------------
+  ForwardTiled,
+
+  // Clustered Forward Shaders
+  // --------------------------------------------------------------------
+
+  //  Debug Forward Shaders
+  // --------------------------------------------------------------------
+  ForwardDebugCoreLight,
+  ForwardDebugCutOffLight,
+};
 
 
-		// Clustered Forward Shaders
-		// --------------------------------------------------------------------
+/*!
+ * Enum specifying all the possible deferred shaders
+ */
+enum class DeferredShaderId {
+  //  Regular Deferred Shaders
+  // --------------------------------------------------------------------
+  DeferredBasic,
+  DeferredAttenuated,
 
+  // Tiled Forward Shaders
+  // --------------------------------------------------------------------
+  DeferredTiled
+};
 
-		//  Debug Forward Shaders
-		// --------------------------------------------------------------------
-		ForwardDebugCoreLight,
-		ForwardDebugCutOffLight
+// FIXME rewrite this to something more elegant
+/*!
+ ShaderKey specifies a ShaderId and corresponding PipelineType
+ */
+struct  ShaderKey {
+  // Constructors
+  ShaderKey();
+  ShaderKey(ForwardShaderId id);
+  ShaderKey(DeferredShaderId id);
 
-		// ====================================================================
-		//  Deferred
-		// ====================================================================
-	};
-}
+  // MemberTypes
+  PipelineType type;
+  ForwardShaderId forward_id;
+  DeferredShaderId deferred_id;
+};
+
+} // pipeline
+} // nTiled

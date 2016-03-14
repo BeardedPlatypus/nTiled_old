@@ -1,106 +1,119 @@
 #pragma once
 
+// ----------------------------------------------------------------------------
+//  Libraries
+// ----------------------------------------------------------------------------
 #include <glad\glad.h>
 #include <string>
 #include <vector>
 #include <map>
 
-#include "camera\Camera.h"
+// ----------------------------------------------------------------------------
+//  nTiled headers
+// ----------------------------------------------------------------------------
 #include "world\World.h"
 #include "state\State.h"
 
 #include "pipeline\PipelineObject.h"
-#include "pipeline\shaders\Shader.h"
+#include "shaders\forward-shading\ForwardShader.h"
+#include "shaders\deferred-shading\DeferredShader.h"
 
 // FIXME TEST REMOVE
 #include "pipeline\debug-display\ConstantQuadWriter.h"
 #include "pipeline\debug-display\LightProjectorQuadWriter.h"
 #include "pipeline\debug-display\LightTilesDisplay.h"
 
-namespace nTiled_pipeline {
-	// ---------------------------------------------------------------------------
-	//  Pipeline Base class
-	// ---------------------------------------------------------------------------
-	class Pipeline {
-	public:
-		Pipeline(nTiled_state::State& state);
-		virtual ~Pipeline() {}
-		// Render Methods
-		virtual void render() = 0;
+namespace nTiled {
+namespace pipeline {
 
-		// Property Methods
-		nTiled_state::State& state;
-		virtual void addObject(nTiled_world::Object& object) = 0;
-	};
+// ---------------------------------------------------------------------------
+//  Pipeline Base class
+// ---------------------------------------------------------------------------
+class Pipeline {
+ public:
+  Pipeline(state::State& state);
+  virtual ~Pipeline() {}
+  // Render Methods
+  virtual void render() = 0;
 
-	// ----------------------------------------------------------------------------
-	//  Forward Pipeline
-	// ----------------------------------------------------------------------------
-	class ForwardPipeline : public Pipeline {
-	public:
-		ForwardPipeline(nTiled_state::State& state);
+  // Property Methods
+  virtual void addObject(const world::Object& object) = 0;
 
-		// Render Methods
-		void render();
+ protected:
+  state::State& state;
+};
 
-		// Property Methods
-		void addObject(nTiled_world::Object& object);
+// ----------------------------------------------------------------------------
+//  Forward Pipeline
+// ----------------------------------------------------------------------------
+class ForwardPipeline : public Pipeline {
+ public:
+  ForwardPipeline(state::State& state);
 
-	private:		
-		// Render methods.
-		std::vector<PipelineObject> objects;
-		std::map<ShaderId, ShaderBatch*> shaders;
-	};
+  // Render Methods
+  void render();
 
-	// Let's be silly
-	class ForwardDebugPipeline : public Pipeline {
-	public:
-		ForwardDebugPipeline(nTiled_state::State& state);
+  // Property Methods
+  void addObject(const world::Object& object);
 
-		// Render Methods
-		void render();
+private:
+  // Render methods.
+  std::vector<PipelineObject> objects;
+  std::map<ForwardShaderId, ForwardShader*> shaders;
+};
 
-		// Property Methods
-		void addObject(nTiled_world::Object& object);
+// ----------------------------------------------------------------------------
+//  Forward Debug Pipeline
+// ----------------------------------------------------------------------------
+class ForwardDebugPipeline : public Pipeline {
+public:
+  ForwardDebugPipeline(state::State& state);
 
-	private:
-		// Render methods.
-		std::vector<PipelineObject> objects;
-		std::map<ShaderId, ShaderBatch*> shaders;
+  // Render Methods
+  void render();
 
-		// Additional Frame buffer objects 
-		GLuint p_fbo;
-		GLuint p_pass_result;
+  // Property Methods
+  void addObject(const world::Object& object);
 
-		PipelineObject fullscreen_quad;
-		GLuint result_pass_sp;
+private:
+  // Render methods.
+  std::vector<PipelineObject> objects;
+  std::map<ForwardShaderId, ForwardShader*> shaders;
 
-		// FIXME TEST REMOVE
-		ConstantQuadWriter quad_writer;
-		LightProjectorQuadWriter draw_pretty_squares;
+  // Additional Frame buffer objects 
+  GLuint p_fbo;
+  GLuint p_pass_result;
 
-		BoxProjector projector;
-		TiledLightManager manager;
-		LightTilesDisplay tiles_display;
-	};
+  PipelineObject fullscreen_quad;
+  GLuint result_pass_sp;
 
-	// ----------------------------------------------------------------------------
-	//  Deferred Pipeline
-	// ----------------------------------------------------------------------------
-	class DeferredPipeline : public Pipeline {
-	public:
-		DeferredPipeline(nTiled_state::State& state,
-			             ShaderId shader_id);
+  // FIXME TEST REMOVE
+  ConstantQuadWriter quad_writer;
+  LightProjectorQuadWriter draw_pretty_squares;
 
-		// Render Methods
-		void render();
+  BoxProjector projector;
+  TiledLightManager manager;
+  LightTilesDisplay tiles_display;
+};
 
-		// Property Methods
-		void addObject(nTiled_world::Object& object);
-	
-	private:
-		// Render methods.
-		std::vector<PipelineObject> objects;
-		ShaderBatch* deferredShader;
-	};
-}
+// ----------------------------------------------------------------------------
+//  Deferred Pipeline
+// ----------------------------------------------------------------------------
+class DeferredPipeline : public Pipeline {
+public:
+  DeferredPipeline(state::State& state);
+
+  // Render Methods
+  void render();
+
+  // Property Methods
+  void addObject(const world::Object& object);
+
+private:
+  // Render methods.
+  std::vector<PipelineObject> objects;
+  DeferredShader* deferred_shader;
+};
+
+} // pipeline
+} // nTiled

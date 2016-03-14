@@ -1,10 +1,13 @@
 #pragma once
 
-namespace nTiled_pipeline {
-	class DebugShader {
-	public:
-		virtual ~DebugShader() {}
+namespace nTiled {
+namespace pipeline {
+class DebugShader {
+ public:
+  virtual ~DebugShader() {}
 
-		virtual void render() = 0;
-	};
-}
+  virtual void render() = 0;
+};
+
+} // pipeline
+} // nTiled
